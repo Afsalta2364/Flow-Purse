@@ -651,12 +651,8 @@
     }
     function load(saved, legacy) {
       if (saved !== null) return validate(JSON.parse(saved));
-      const samples = [
-        { id: 1, desc: 'Client Project Advance', amount: 4850, type: 'inflow', date: 'Just now' },
-        { id: 2, desc: 'AWS & Cloud Hosting', amount: 320, type: 'outflow', date: 'Upcoming' },
-        { id: 3, desc: 'Software Subscriptions', amount: 149, type: 'outflow', date: 'Upcoming' }
-      ];
-      const entries = legacy === null ? samples : JSON.parse(legacy);
+      if (legacy === null) return validate({ version: 2, pots: [], transactions: [] });
+      const entries = JSON.parse(legacy);
       if (!Array.isArray(entries)) throw new Error('Saved entries could not be read.');
       const transactions = entries.map(entry => ({ id: String(entry.id), desc: entry.desc, amountCents: Math.round(entry.amount * 100), type: entry.type, date: entry.date || 'Scheduled', potId: null }));
       return validate({ version: 2, pots: [], transactions });
