@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(file icon/*)",
+      "Bash(sips --version)",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git config *)"
+    ]
+  }
+}

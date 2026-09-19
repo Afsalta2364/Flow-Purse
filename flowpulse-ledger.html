@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f7f4">
+<meta name="description" content="A little clarity for your cashflow. Track income, allocate it to pots, and plan your spending with Flow Purse.">
+<title>Flow Purse — Cashflow, in focus</title>
+<link rel="icon" type="image/png" sizes="32x32" href="icon/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icon/icon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon/icon-180.png">
+<link rel="manifest" href="icon/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Flow Purse">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>
+  try {
+    const preference = localStorage.getItem('Flow Purse_theme');
+    document.documentElement.dataset.theme = preference === 'dark' || (!preference && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f5f7f4;
+    --surface: #ffffff;
+    --surface-2: #f7f9f6;
+    --surface-hover: #f0f5f1;
+    --ink: #20382e;
+    --muted: #637469;
+    --muted-2: #637469;
+    --line: #e5ebe4;
+    --line-strong: #cbd7cd;
+    --accent: #235e46;
+    --accent-hover: #184c37;
+    --accent-soft: #eaf2eb;
+    --green: #287652;
+    --green-soft: #eaf5ee;
+    --rust: #ad4b35;
+    --rust-soft: #fbefe9;
+    --hero: #204e3c;
+    --hero-ink: #f6fbf5;
+    --hero-muted: #c6d9cb;
+    --hero-line: rgba(223, 241, 220, .18);
+    --chart-in: #7da589;
+    --chart-out: #e5b99c;
+    --shadow: 0 3px 6px rgba(28, 54, 37, .015), 0 12px 32px rgba(28, 54, 37, .025);
+    --heading: 'Manrope', 'Inter', sans-serif;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #111c17;
+    --surface: #1a2820;
+    --surface-2: #202f26;
+    --surface-hover: #26392c;
+    --ink: #e4ede3;
+    --muted: #adbdb0;
+    --muted-2: #a0b1a4;
+    --line: #2d3e32;
+    --line-strong: #455d4b;
+    --accent: #b9d5a8;
+    --accent-hover: #c9e4b9;
+    --accent-soft: #2b402f;
+    --green: #a0d3ac;
+    --green-soft: #263d2e;
+    --rust: #ecb098;
+    --rust-soft: #402e26;
+    --hero: #2b543e;
+    --hero-ink: #f5f9ec;
+    --hero-muted: #c8d8c4;
+    --chart-in: #9fc493;
+    --chart-out: #d3a288;
+    --shadow: 0 8px 28px rgba(0, 0, 0, .07);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; min-width: 320px; }
+  button, input { font: inherit; }
+  button { cursor: pointer; color: inherit; -webkit-tap-highlight-color: transparent; }
+  button, input { transition: background .18s, border-color .18s, box-shadow .18s, color .18s; }
+  button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--chart-in); outline-offset: 4px; }
+  button:disabled { cursor: default; opacity: .5; }
+  svg { width: 18px; height: 18px; stroke-width: 1.7; flex-shrink: 0; }
+  h1, h2, h3, p { margin: 0; }
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+  .shell { max-width: 1192px; padding: 0 36px; margin: 0 auto; }
+  .topbar { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); padding: max(16px, env(safe-area-inset-top)) 0 16px; }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .brand-mark { width: 40px; height: 40px; border-radius: 13px; overflow: hidden; display: grid; place-items: center; }
+  .brand-mark img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .brand-name { font: 800 21px var(--heading); letter-spacing: -.8px; }
+  .brand-sub { color: var(--muted); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; margin-top: 3px; }
+  .header-actions { display: flex; align-items: center; gap: 20px; }
+  .save-status { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
+  .save-status svg { width: 14px; height: 14px; color: var(--green); }
+  .icon-btn { width: 39px; height: 39px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .icon-btn:hover { background: var(--surface-hover); border-color: var(--line-strong); }
+  .theme-sun, [data-theme="dark"] .theme-moon { display: none; }
+  [data-theme="dark"] .theme-sun { display: block; }
+  .intro { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0 22px; }
+  .eyebrow { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 11px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--chart-in); }
+  h1 { font: 600 clamp(27px, 3.2vw, 37px)/1.25 var(--heading); letter-spacing: -1.5px; }
+  .intro p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 10px; }
+  .primary-btn { background: var(--accent); color: var(--surface); border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-size: 12px; font-weight: 600; padding: 13px 18px; white-space: nowrap; min-height: 44px; }
+  .primary-btn:hover { background: var(--accent-hover); box-shadow: 0 3px 12px rgba(27, 64, 42, .12); }
+  .primary-btn:active { transform: translateY(1px); }
+  .primary-btn svg { width: 16px; height: 16px; }
+  .overview-meta { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 11px; margin-bottom: 14px; gap: 12px; }
+  .overview-meta > span { display: flex; align-items: center; gap: 6px; }
+  .overview-meta svg { width: 13px; height: 13px; }
+  .currency-label { letter-spacing: 1px; font-size: 10px; }
+  .tally { display: grid; grid-template-columns: 1.12fr 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  .tally-item { position: relative; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 23px 24px 20px; min-width: 0; overflow: hidden; box-shadow: var(--shadow); }
+  .tally-item:hover { border-color: var(--line-strong); box-shadow: 0 7px 24px rgba(28, 54, 37, .07); }
+  .tally-item.net { background: var(--hero); color: var(--hero-ink); border-color: var(--hero); }
+  .tally-item.net::after { content: ''; position: absolute; width: 220px; height: 220px; border: 1px solid rgba(213, 236, 213, .08); border-radius: 50%; right: -100px; top: -75px; box-shadow: 0 0 0 25px rgba(213, 236, 213, .035), 0 0 0 50px rgba(213, 236, 213, .025); pointer-events: none; }
+  .tally-label { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 500; margin-bottom: 20px; gap: 8px; position: relative; z-index: 1; }
+  .tally-icon { width: 33px; height: 33px; border-radius: 10px; display: grid; place-items: center; background: var(--green-soft); color: var(--green); }
+  .outflow .tally-icon { background: var(--rust-soft); color: var(--rust); }
+  .net .tally-icon { background: rgba(225, 240, 217, .1); color: var(--hero-ink); }
+  .net .tally-label { color: var(--hero-muted); }
+  .tally-value { font: 600 clamp(26px, 2.9vw, 36px)/1.15 var(--heading); letter-spacing: -1.3px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; position: relative; z-index: 1; }
+  .tally-foot { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--muted); }
+  .tally-foot svg { width: 13px; height: 13px; }
+  .net .tally-foot { color: var(--hero-muted); border-color: var(--hero-line); }
+  .balance-status { display: flex; gap: 6px; align-items: center; }
+  .balance-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #b9d8a9; }
+  .net[data-status="negative"] .balance-status::before { background: #ffc3a8; }
+  .content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; align-items: start; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+  .panel-heading { padding: 24px 24px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  h2 { font: 700 15px var(--heading); letter-spacing: -.25px; }
+  .panel-sub { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .count-badge { border: 1px solid var(--line); border-radius: 7px; font: 500 10px 'Inter', sans-serif; padding: 3px 7px; color: var(--muted); margin-left: 6px; vertical-align: middle; }
+  .text-btn { background: none; border: 0; color: var(--muted); font-size: 11px; padding: 9px 0 9px 8px; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .text-btn svg { width: 13px; height: 13px; }
+  .text-btn:hover:not(:disabled) { color: var(--rust); }
+  .ledger-tools { padding: 0 24px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .filters { display: inline-flex; gap: 3px; padding: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; }
+  .filter-btn { background: transparent; color: var(--muted); border: 1px solid transparent; border-radius: 7px; padding: 7px 12px; font-size: 11px; }
+  .filter-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink); border-color: var(--line); box-shadow: 0 1px 3px rgba(28, 54, 37, .04); font-weight: 600; }
+  .ledger-sort { display: flex; gap: 5px; align-items: center; color: var(--muted); font-size: 10px; }
+  .ledger-sort svg { width: 13px; height: 13px; }
+  .table-head, .entry-row { display: grid; grid-template-columns: minmax(0, 1fr) 76px 115px 14px; align-items: center; gap: 12px; }
+  .table-head { background: var(--surface-2); padding: 11px 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); font-size: 9px; letter-spacing: .8px; text-transform: uppercase; }
+  .table-head .amount { text-align: right; }
+  .entry-row { width: 100%; border: 0; border-bottom: 1px solid var(--line); background: transparent; text-align: left; padding: 19px 24px; }
+  .entry-row:last-child { border-bottom: 0; }
+  .entry-row:hover { background: var(--surface-hover); }
+  .entry-main { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .entry-icon { width: 37px; height: 37px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
+  .in { color: var(--green); }
+  .out { color: var(--rust); }
+  .entry-icon.in, .type-badge.in { background: var(--green-soft); }
+  .entry-icon.out, .type-badge.out { background: var(--rust-soft); }
+  .entry-icon svg { width: 17px; height: 17px; }
+  .entry-copy { min-width: 0; }
+  .entry-name { display: block; font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry-date { display: block; font-size: 10px; color: var(--muted); margin-top: 5px; }
+  .type-badge { justify-self: start; font-size: 9px; font-weight: 500; padding: 5px 8px; border-radius: 6px; }
+  .entry-amount { font-size: 12px; font-weight: 600; letter-spacing: -.15px; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
+  .entry-chevron { width: 13px; height: 13px; color: var(--muted-2); }
+  .ledger-bottom { padding: 14px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .ledger-bottom span { display: inline-flex; align-items: center; gap: 5px; }
+  .ledger-bottom svg { width: 12px; height: 12px; }
+  .mix-panel .panel-heading { padding-bottom: 12px; }
+  .mix-panel .panel-heading > svg { color: var(--muted-2); width: 17px; height: 17px; }
+  .donut-wrap { padding: 6px 24px 22px; display: grid; place-items: center; }
+  .donut { width: 157px; height: 157px; border-radius: 50%; background: conic-gradient(var(--chart-in) 0% var(--in-share, 0%), var(--chart-out) var(--in-share, 0%) 100%); display: grid; place-items: center; transform: rotate(-90deg); }
+  .donut.empty { background: var(--line); }
+  .donut-center { width: 127px; height: 127px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; flex-direction: column; transform: rotate(90deg); }
+  .donut-center strong { font: 600 28px var(--heading); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+  .donut-center span { color: var(--muted); font-size: 10px; margin-top: 3px; }
+  .legend { padding: 0 24px 21px; display: grid; gap: 13px; }
+  .legend-row { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+  .legend-label { color: var(--muted); display: flex; align-items: center; gap: 7px; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 2px; background: var(--chart-in); }
+  .legend-dot.expense { background: var(--chart-out); }
+  .legend-value { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .insight { margin: 0 18px 18px; border-radius: 10px; padding: 13px; background: var(--accent-soft); display: flex; align-items: flex-start; gap: 9px; }
+  .insight svg { color: var(--green); width: 15px; height: 15px; margin-top: 1px; }
+  .insight p { font-size: 10px; line-height: 1.65; color: var(--muted); }
+  .insight strong { color: var(--ink); font-weight: 600; }
+  .page-footer { display: flex; justify-content: center; gap: 15px; padding: 24px 0 max(24px, env(safe-area-inset-bottom)); color: var(--muted); font-size: 11px; line-height: 1.6; }
+  .page-footer span { display: flex; align-items: center; gap: 6px; }
+  .page-footer svg { width: 12px; height: 12px; }
+  .empty-state { padding: 40px 24px; text-align: center; }
+  .empty-icon { width: 48px; height: 48px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); border-radius: 15px; margin: 0 auto 14px; }
+  .empty-state h3 { font: 700 15px var(--heading); }
+  .empty-state p { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 7px; }
+  .empty-state button { margin-top: 18px; }
+  .modal-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(8, 24, 15, .4); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 24px; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .2s, visibility .2s; }
+  .modal-backdrop.show { visibility: visible; opacity: 1; pointer-events: auto; }
+  .modal { position: relative; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 22px; padding: 30px; width: 100%; max-width: 450px; max-height: calc(100dvh - 48px); overflow-y: auto; box-shadow: 0 28px 80px rgba(0, 0, 0, .16); transform: translateY(8px); transition: transform .2s; }
+  .show .modal { transform: none; }
+  .modal-close { position: absolute; top: 22px; right: 22px; width: 32px; height: 32px; }
+  .modal-close svg { width: 16px; height: 16px; }
+  .modal-symbol { width: 42px; height: 42px; background: var(--accent-soft); color: var(--accent); border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px; }
+  .modal h3 { font: 700 22px var(--heading); letter-spacing: -.7px; overflow-wrap: anywhere; padding-right: 18px; }
+  .modal-sub { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 7px 0 24px; }
+  .field { margin-bottom: 19px; border: 0; padding: 0; min-width: 0; }
+  .field > label, .field legend { display: block; font-size: 11px; color: var(--ink); font-weight: 500; margin-bottom: 9px; padding: 0; }
+  .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 11px; }
+  .segmented label { position: relative; cursor: pointer; }
+  .segmented input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .seg-option { border: 1px solid transparent; border-radius: 7px; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 12px; color: var(--muted); padding: 10px; }
+  .seg-option svg { width: 15px; height: 15px; }
+  .segmented input:checked + .seg-option.in { background: var(--green-soft); border-color: var(--line-strong); color: var(--green); }
+  .segmented input:checked + .seg-option.out { background: var(--rust-soft); border-color: var(--line-strong); color: var(--rust); }
+  .segmented input:focus-visible + .seg-option { outline: 3px solid var(--chart-in); outline-offset: 2px; }
+  .field input[type="text"], .field input[type="number"] { width: 100%; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 10px; padding: 13px; color: var(--ink); min-height: 46px; }
+  .field input::placeholder { color: var(--muted-2); }
+  .field input:focus { border-color: var(--accent); }
+  .amount-wrap { position: relative; }
+  .amount-wrap input[type="number"] { padding-left: 30px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .amount-wrap span { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); color: var(--muted); }
+  .submit-btn { width: 100%; margin-top: 5px; }
+  .form-note { text-align: center; color: var(--muted); font-size: 10px; margin-top: 14px; line-height: 1.5; }
+  .cat-list { margin: 0 -12px; max-height: 50vh; overflow-y: auto; }
+  .cat-list .entry-row { grid-template-columns: minmax(0, 1fr) 105px 12px; padding: 16px 12px; border-radius: 8px; }
+  .cat-list .type-badge { display: none; }
+  .btn-back { display: flex; align-items: center; gap: 5px; background: none; border: 0; color: var(--muted); font-size: 11px; padding: 0; margin-bottom: 23px; }
+  .btn-back:hover { color: var(--ink); }
+  .btn-back svg { width: 13px; height: 13px; }
+  .detail-badge { display: inline-flex; gap: 6px; align-items: center; border-radius: 7px; padding: 6px 9px; margin-bottom: 13px; font-size: 11px; background: var(--green-soft); }
+  .detail-badge.out { background: var(--rust-soft); }
+  .detail-badge svg { width: 13px; height: 13px; }
+  .detail-amount { font: 600 34px var(--heading); letter-spacing: -1px; margin: 12px 0 22px; overflow-wrap: anywhere; }
+  .detail-row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 13px 0; font-size: 12px; }
+  .detail-row span:first-child { color: var(--muted); }
+  .delete-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: var(--rust-soft); color: var(--rust); border: 1px solid transparent; border-radius: 10px; padding: 13px; margin-top: 24px; font-size: 12px; font-weight: 500; }
+  .delete-btn:hover { border-color: var(--rust); }
+  .delete-btn svg { width: 14px; height: 14px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  @media (min-width: 1000px) { main { padding-top: 5px; } }
+  @media (max-width: 950px) {
+    .shell { padding: 0 24px; }
+    .content-grid { grid-template-columns: minmax(0, 1fr) 265px; gap: 18px; }
+    .tally-item { padding: 20px; }
+    .entry-row, .table-head { grid-template-columns: minmax(0, 1fr) 96px 12px; gap: 8px; padding-left: 20px; padding-right: 20px; }
+    .entry-row .type-badge, .table-head .type-label { display: none; }
+    .ledger-sort { display: none; }
+  }
+  @media (max-width: 740px) {
+    .topbar { min-height: 82px; }
+    .intro { padding: 30px 0 24px; }
+    .intro p { max-width: 300px; }
+    .tally { grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 20px; }
+    .tally-item.net { grid-column: 1 / -1; }
+    .net .tally-label { margin-bottom: 12px; }
+    .net .tally-foot { margin-top: 18px; }
+    .net .tally-value { font-size: 38px; }
+    .content-grid { grid-template-columns: 1fr; gap: 20px; }
+    .mix-panel { display: grid; grid-template-columns: 1fr 1fr; }
+    .mix-panel .panel-heading { grid-column: 1 / -1; }
+    .donut-wrap { grid-row: span 2; padding-bottom: 24px; }
+    .legend { align-self: end; padding: 6px 24px 20px 0; }
+    .insight { margin-left: 0; }
+    .entry-row, .table-head { grid-template-columns: minmax(0, 1fr) 70px 100px 12px; }
+    .entry-row .type-badge, .table-head .type-label { display: block; }
+    .page-footer { flex-direction: column; align-items: center; gap: 7px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .shell { padding: 0 18px; }
+    .header-actions { gap: 11px; }
+    .save-status { font-size: 0; gap: 0; }
+    .save-status svg { width: 17px; height: 17px; }
+    .brand-name { font-size: 20px; }
+    .brand-sub { font-size: 9px; }
+    .brand-mark { width: 36px; height: 36px; border-radius: 11px; }
+    .intro { flex-wrap: wrap; gap: 19px; }
+    .intro h1 { font-size: 29px; max-width: 310px; }
+    .intro p { font-size: 12px; }
+    .intro .primary-btn { padding: 11px 16px; }
+    .tally-item { padding: 17px 16px; border-radius: 15px; }
+    .tally-label { font-size: 11px; margin-bottom: 17px; }
+    .tally-icon { width: 27px; height: 27px; border-radius: 8px; }
+    .tally-icon svg { width: 15px; height: 15px; }
+    .tally-value { font-size: 24px; letter-spacing: -.9px; }
+    .tally-foot { font-size: 9px; margin-top: 18px; padding-top: 12px; }
+    .tally-foot svg { display: none; }
+    .net .tally-foot svg { display: block; }
+    .panel-heading { padding: 21px 18px 18px; }
+    .ledger-tools { padding: 0 18px 18px; }
+    .entry-row, .table-head { grid-template-columns: minmax(0, 1fr) 94px 10px; gap: 6px; padding-left: 18px; padding-right: 18px; }
+    .entry-row .type-badge, .table-head .type-label { display: none; }
+    .entry-main { gap: 9px; }
+    .entry-icon { width: 32px; height: 32px; border-radius: 9px; }
+    .entry-name, .entry-amount { font-size: 11px; }
+    .entry-date { font-size: 9px; }
+    .ledger-bottom { padding: 13px 18px; font-size: 9px; }
+    .donut { width: 133px; height: 133px; }
+    .donut-center { width: 109px; height: 109px; }
+    .donut-center strong { font-size: 25px; }
+    .donut-wrap { padding: 6px 15px 22px; }
+    .legend { padding-right: 18px; font-size: 10px; }
+    .legend-row { font-size: 10px; }
+    .insight { padding: 10px; margin-right: 14px; }
+    .insight svg { display: none; }
+    .modal-backdrop { padding: 16px; }
+    .modal { padding: 25px 22px; border-radius: 19px; max-height: calc(100dvh - 32px); }
+    .field input[type="text"], .field input[type="number"] { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+  /* Pots share the ledger's theme; their colors identify allocations. */
+  [hidden] { display: none !important; }
+  .color-sage { --pot-color: #4e8162; --pot-soft: #eaf2e9; }
+  .color-blue { --pot-color: #547896; --pot-soft: #eaf0f8; }
+  .color-peach { --pot-color: #b57451; --pot-soft: #faf0e7; }
+  .color-purple { --pot-color: #8972a6; --pot-soft: #f1edf7; }
+  .color-gold { --pot-color: #9a7e39; --pot-soft: #f8f2df; }
+  .color-rose { --pot-color: #af6a7e; --pot-soft: #f8edf1; }
+  .color-neutral { --pot-color: #8a968b; --pot-soft: var(--surface-2); }
+  [data-theme="dark"] .color-sage { --pot-color: #acd5a6; --pot-soft: #2c4031; }
+  [data-theme="dark"] .color-blue { --pot-color: #abcbe8; --pot-soft: #273947; }
+  [data-theme="dark"] .color-peach { --pot-color: #e9bd99; --pot-soft: #42372b; }
+  [data-theme="dark"] .color-purple { --pot-color: #c7b1e2; --pot-soft: #383044; }
+  [data-theme="dark"] .color-gold { --pot-color: #dfca87; --pot-soft: #3e3928; }
+  [data-theme="dark"] .color-rose { --pot-color: #e6b0c2; --pot-soft: #43303a; }
+  .pots-section { margin-top: 34px; }
+  .pots-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 19px; }
+  .pots-heading h2 { font-size: 19px; }
+  .pots-heading .panel-sub { font-size: 12px; }
+  .secondary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: var(--surface); border: 1px solid var(--line-strong); color: var(--ink); border-radius: 10px; padding: 11px 15px; min-height: 42px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .secondary-btn:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--accent); }
+  .secondary-btn svg { width: 15px; height: 15px; }
+  .rules-overview { padding: 21px 24px; margin-bottom: 20px; box-shadow: none; }
+  .rules-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 17px; }
+  .rules-heading h3 { font: 600 13px var(--heading); letter-spacing: -.15px; }
+  .rule-totals { display: flex; align-items: baseline; gap: 6px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+  .rule-totals strong { color: var(--ink); font: 600 23px/1 var(--heading); letter-spacing: -.8px; font-variant-numeric: tabular-nums; }
+  .rule-bar { display: flex; height: 12px; overflow: hidden; border-radius: 999px; background: var(--line); }
+  .rule-segment { display: block; background: var(--pot-color); height: 100%; flex-shrink: 0; }
+  .rules-footer { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px 24px; margin-top: 17px; }
+  .rule-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 20px; flex: 1; min-width: 0; }
+  .rule-legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); max-width: 100%; }
+  .rule-legend-name { min-width: 0; overflow-wrap: anywhere; }
+  .rule-legend-item strong { font-weight: 600; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .rule-remaining { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+  .rule-remaining::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
+  .rule-remaining.complete { color: var(--green); }
+  .rule-remaining.complete::before { background: var(--green); }
+  .rule-empty { font-size: 11px; line-height: 1.5; color: var(--muted); }
+  .pot-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--pot-color); flex-shrink: 0; }
+  .pots-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .pot-card { display: flex; flex-direction: column; align-items: stretch; min-width: 0; text-align: left; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 17px; box-shadow: var(--shadow); }
+  .pot-card:hover { border-color: var(--pot-color); box-shadow: 0 7px 24px rgba(28, 54, 37, .07); }
+  .pot-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 17px; }
+  .pot-icon { background: var(--pot-soft); color: var(--pot-color); width: 37px; height: 37px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
+  .pot-icon svg { width: 20px; height: 20px; }
+  .pot-rule { flex: 1; color: var(--muted); font-size: 10px; }
+  .pot-name { font: 600 14px var(--heading); margin-bottom: 8px; overflow-wrap: anywhere; }
+  .pot-balance { font: 600 clamp(25px, 2.5vw, 31px)/1.25 var(--heading); letter-spacing: -1px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .pot-status { color: var(--muted); font-size: 10px; margin-top: 8px; min-height: 14px; line-height: 1.5; }
+  .pot-status.out { color: var(--rust); }
+  .pot-card-bottom { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 15px; display: flex; justify-content: space-between; gap: 12px; }
+  .pot-card-bottom > span { font-size: 9px; color: var(--muted); min-width: 0; }
+  .pot-card-bottom strong { display: block; font-size: 11px; font-weight: 500; color: var(--ink); margin-top: 5px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+  .unallocated-card { background: var(--surface-2); border-style: dashed; box-shadow: none; }
+  .pots-empty { display: flex; align-items: center; gap: 15px; background: var(--accent-soft); padding: 22px; border-radius: 14px; margin-bottom: 20px; }
+  .pots-empty .empty-icon { margin: 0; background: var(--surface); flex-shrink: 0; }
+  .pots-empty h3 { font: 700 14px var(--heading); margin-bottom: 5px; }
+  .pots-empty p { color: var(--muted); font-size: 11px; line-height: 1.7; max-width: 550px; }
+  .pots-empty .secondary-btn { margin-left: auto; }
+  .pots-note { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 11px; line-height: 1.6; margin: 18px 0 0; }
+  .pots-note svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .form-error { font-size: 12px; line-height: 1.6; color: var(--rust); background: var(--rust-soft); border-radius: 9px; padding: 10px 12px; margin: 12px 0; }
+  .field-hint { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 8px 0 0; }
+  .field-hint.out { color: var(--rust); }
+  .field select { width: 100%; min-height: 46px; padding: 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface-2); color: var(--ink); font: inherit; font-size: 12px; }
+  select:focus-visible { outline: 3px solid var(--chart-in); outline-offset: 3px; }
+  .allocation-box { border: 1px solid var(--line); border-radius: 12px; padding: 15px; background: var(--surface-2); margin: 18px 0; }
+  .allocation-box h4 { font: 600 11px 'Inter', sans-serif; margin: 0 0 10px; }
+  .allocation-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; font-size: 11px; padding: 7px 0; }
+  .allocation-row > span { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+  .allocation-row strong { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; flex-shrink: 0; }
+  .allocation-box > p, .pot-preview > p { color: var(--muted); font-size: 11px; line-height: 1.7; }
+  .category-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 0 20px; border-bottom: 1px solid var(--line); margin: 18px 0 10px; }
+  .category-summary > strong { font: 600 30px var(--heading); letter-spacing: -1px; overflow-wrap: anywhere; }
+  .category-summary > span { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+  .modal-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+  .modal-wide { max-width: 540px; }
+  .cat-list .entry-date { line-height: 1.5; overflow-wrap: anywhere; }
+  .balance-caption { color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: -12px; }
+  .balance-caption.out { color: var(--rust); }
+  .pot-summary { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); margin: 18px 0; }
+  .pot-summary > div { padding: 16px; min-width: 0; }
+  .pot-summary > div + div { border-left: 1px solid var(--line); }
+  .pot-summary span { display: block; color: var(--muted); font-size: 10px; margin-bottom: 7px; }
+  .pot-summary strong { font: 600 18px var(--heading); letter-spacing: -.4px; overflow-wrap: anywhere; }
+  .pot-detail-actions { justify-content: flex-start; }
+  .list-heading { font: 600 12px var(--heading); margin: 27px 0 9px; border-top: 1px solid var(--line); padding-top: 22px; }
+  .assign-btn { width: 100%; margin-bottom: 15px; }
+  .percent-wrap { position: relative; }
+  .percent-wrap input[type="number"] { padding-right: 32px; }
+  .percent-wrap > span { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); color: var(--muted); }
+  .color-options { display: flex; flex-wrap: wrap; gap: 12px; padding: 5px 0; }
+  .color-options label { position: relative; cursor: pointer; }
+  .color-options input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .color-swatch { display: grid; place-items: center; width: 31px; height: 31px; border: 4px solid var(--surface); border-radius: 50%; background: var(--pot-color); outline: 1px solid var(--line); }
+  .color-options input:checked + .color-swatch { outline: 2px solid var(--pot-color); }
+  .color-swatch::after { content: ''; width: 5px; height: 8px; border-right: 2px solid var(--surface); border-bottom: 2px solid var(--surface); transform: rotate(45deg) translateY(-1px); visibility: hidden; }
+  .color-options input:checked + .color-swatch::after { visibility: visible; }
+  .color-options input:focus-visible + .color-swatch { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .rule-notice { color: var(--muted); font-size: 11px; line-height: 1.65; background: var(--accent-soft); padding: 12px 14px; border-radius: 9px; margin: 18px 0 16px; }
+  .rule-notice strong { color: var(--ink); font-weight: 600; }
+  .pot-preview { border: 1px solid var(--line); border-radius: 11px; padding: 10px 14px; margin: 16px 0; }
+  .preview-total { border-top: 1px solid var(--line); margin-top: 5px; padding-top: 12px; }
+  @media (max-width: 950px) { .pots-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) {
+    .pots-section { margin-top: 27px; }
+    .pots-heading h2 { font-size: 17px; }
+    .pots-heading .panel-sub { font-size: 11px; }
+    .rules-overview { padding: 18px; }
+    .rules-heading { gap: 12px; }
+    .rule-totals strong { font-size: 21px; }
+    .rules-footer { flex-direction: column; gap: 13px; }
+    .rule-legend { gap: 10px 16px; }
+    .pots-empty { flex-wrap: wrap; padding: 18px; }
+    .pots-empty .empty-icon { display: none; }
+    .pots-empty .secondary-btn { margin-left: 0; }
+    .pot-card { padding: 18px; }
+    .pot-card-top { flex-wrap: wrap; gap: 8px; margin-bottom: 17px; }
+    .pot-card-top .entry-chevron { display: none; }
+    .pot-rule { font-size: 9px; }
+    .pot-balance { font-size: 25px; }
+    .pot-card-bottom { flex-direction: column; gap: 9px; }
+    .pot-card-bottom > span { display: flex; justify-content: space-between; gap: 6px; }
+    .pot-card-bottom strong { margin: 0; font-size: 10px; }
+  }
+  @media (max-width: 400px) {
+    .pots-grid { grid-template-columns: 1fr; gap: 14px; }
+    .pot-card-bottom { flex-direction: row; }
+    .pot-card-bottom > span { display: block; }
+    .pot-card-bottom strong { margin-top: 5px; }
+    .field select { font-size: 16px; }
+    .cat-list .entry-row { grid-template-columns: minmax(0, 1fr) 100px 10px; }
+  }
+
+  .modal h3 + form { margin-top: 22px; }
+  .save-status[data-warning="true"], .save-status[data-warning="true"] svg { color: var(--rust); }
+
+  /* On phones, show the essentials in roomy rows; detail views hold the breakdowns. */
+  @media (max-width: 640px) {
+    .shell { padding: 0 16px; }
+    .topbar { min-height: 73px; gap: 10px; padding: max(14px, env(safe-area-inset-top)) 0 14px; }
+    .brand { gap: 9px; }
+    .brand-name { font-size: 19px; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 10px; }
+    .header-actions { gap: 10px; }
+    .save-status { font-size: 11px; gap: 4px; }
+    .save-status svg { width: 13px; height: 13px; }
+    .icon-btn { width: 44px; height: 44px; }
+    .intro { flex-wrap: nowrap; gap: 16px; padding: 22px 0 18px; }
+    .intro h1 { font-size: 26px; letter-spacing: -.9px; }
+    .intro .primary-btn { padding: 11px 14px; font-size: 12px; }
+    .overview-meta { margin-bottom: 12px; font-size: 11px; }
+    .currency-label { font-size: 10px; letter-spacing: .4px; }
+    .tally { gap: 12px; margin-bottom: 24px; }
+    .tally-item { padding: 16px; border-radius: 15px; }
+    .tally-label { font-size: 12px; margin-bottom: 12px; }
+    .tally-icon { width: 27px; height: 27px; }
+    .tally-value { font-size: clamp(22px, 5.8vw, 29px); letter-spacing: -.8px; }
+    .tally-foot { border: 0; padding-top: 0; margin-top: 13px; font-size: 11px; }
+    .tally-foot svg { display: block; }
+    .net .tally-value { font-size: 34px; }
+    .net .tally-foot { margin-top: 13px; padding-top: 0; }
+    .pots-section { margin-top: 0; }
+    .pots-heading { margin-bottom: 14px; }
+    .pots-heading h2 { font-size: 18px; }
+    .secondary-btn { min-height: 44px; }
+    .rules-overview { padding: 16px; margin-bottom: 14px; border-radius: 14px; }
+    .rules-heading { margin-bottom: 13px; }
+    .rules-heading h3 { font-size: 12px; }
+    .rule-totals strong { font-size: 20px; }
+    .rule-bar { height: 10px; }
+    .rules-footer { flex-direction: row; justify-content: flex-end; margin-top: 11px; }
+    .rule-legend { display: none; }
+    .rule-remaining { font-size: 11px; }
+    .pots-empty { padding: 16px; margin-bottom: 14px; }
+    .pots-empty h3 { font-size: 13px; }
+    .pots-empty p { font-size: 12px; }
+    .pots-grid { grid-template-columns: 1fr; gap: 10px; }
+    .pot-card { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto 12px; gap: 4px 10px; align-items: center; padding: 16px 14px; border-radius: 14px; }
+    .pot-card-top { display: contents; }
+    .pot-card .pot-icon { grid-column: 1; grid-row: 1 / span 2; width: 36px; height: 36px; }
+    .pot-card .pot-name { grid-column: 2; grid-row: 1; font-size: 13px; line-height: 1.4; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pot-card .pot-rule { grid-column: 2; grid-row: 2; font-size: 11px; line-height: 1.4; }
+    .pot-card .pot-balance { grid-column: 3; grid-row: 1 / span 2; text-align: right; margin: 0; font-size: 21px; letter-spacing: -.7px; max-width: min(40vw, 185px); }
+    .pot-card .entry-chevron { display: block; grid-column: 4; grid-row: 1 / span 2; width: 12px; }
+    .pot-card.is-overdrawn .pot-balance { grid-row: 1; }
+    .pot-card .pot-status { grid-column: 3; grid-row: 2; text-align: right; margin: 0; min-height: 0; font-size: 10px; line-height: 1.4; }
+    .page-footer { padding-top: 20px; font-size: 11px; }
+    .modal-backdrop { align-items: flex-end; padding: 12px; }
+    .modal { max-height: calc(100dvh - 24px); padding: 24px 20px; border-radius: 20px; }
+    .modal-close { top: 12px; right: 12px; }
+    .modal-symbol { display: none; }
+    .modal h3 { font-size: 21px; padding-right: 40px; letter-spacing: -.5px; }
+    .modal-sub { margin-bottom: 18px; font-size: 12px; }
+    .field > label, .field legend { font-size: 12px; }
+    .field input[type="text"], .field input[type="number"], .field select { font-size: 16px; }
+    .field-hint, .rule-notice { font-size: 12px; }
+    .color-options { gap: 3px; padding: 0; }
+    .color-options label { width: 44px; height: 44px; display: grid; place-items: center; }
+    .allocation-row { font-size: 12px; }
+    .cat-list .entry-name, .cat-list .entry-amount { font-size: 12px; }
+    .cat-list .entry-date { font-size: 11px; }
+    .cat-list .entry-row { grid-template-columns: minmax(0, 1fr) 103px 10px; }
+    .category-summary { margin-top: 17px; }
+    .category-summary > strong { font-size: 28px; }
+    .balance-caption { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell" id="appShell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><img src="icon/icon-192.png" alt=""></div>
+      <div class="brand-name">Flow Purse</div>
+    </div>
+    <div class="header-actions">
+      <span class="save-status" id="saveStatus"><i data-lucide="check-check"></i><span>Local</span></span>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme"><i data-lucide="moon" class="theme-moon"></i><i data-lucide="sun" class="theme-sun"></i></button>
+    </div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="pageTitle">
+      <h1 id="pageTitle">Cashflow</h1>
+      <button class="primary-btn" id="fabBtn" type="button"><i data-lucide="plus"></i>Add entry</button>
+    </section>
+    <div class="overview-meta"><span><i data-lucide="calendar-days"></i><span id="todayLabel"></span></span><span class="currency-label">PROJECTION · AED</span></div>
+    <section class="tally" aria-label="Cashflow overview">
+      <button class="tally-item net" data-category="all" type="button">
+        <div class="tally-label">Net balance<span class="tally-icon"><i data-lucide="wallet"></i></span></div>
+        <div class="tally-value" id="netFlow">$0.00</div>
+        <div class="tally-foot"><span class="balance-status" id="netFoot">Break-even</span><i data-lucide="arrow-up-right"></i></div>
+      </button>
+      <button class="tally-item inflow" data-category="inflow" type="button">
+        <div class="tally-label">Inflow<span class="tally-icon"><i data-lucide="arrow-down-left"></i></span></div>
+        <div class="tally-value" id="totalInflow">$0.00</div>
+        <div class="tally-foot"><span id="inflowFoot">0 entries</span><i data-lucide="chevron-right"></i></div>
+      </button>
+      <button class="tally-item outflow" data-category="outflow" type="button">
+        <div class="tally-label">Outflow<span class="tally-icon"><i data-lucide="arrow-up-right"></i></span></div>
+        <div class="tally-value" id="totalOutflow">$0.00</div>
+        <div class="tally-foot"><span id="outflowFoot">0 entries</span><i data-lucide="chevron-right"></i></div>
+      </button>
+    </section>
+    <p class="form-error" id="storageError" role="alert" hidden></p>
+    <section class="pots-section" aria-labelledby="potsTitle">
+      <div class="pots-heading"><h2 id="potsTitle">Pots <span class="count-badge" id="potCount">0</span></h2><button class="secondary-btn" id="addPotBtn" type="button"><i data-lucide="plus"></i>Add pot</button></div>
+      <div class="panel rules-overview">
+        <div class="rules-heading"><h3>Inflow allocation</h3><div class="rule-totals"><strong id="allocatedRule">0%</strong><span>allocated</span></div></div>
+        <div class="rule-bar" id="ruleBar" role="img" aria-label="100% unallocated"></div>
+        <div class="rules-footer"><div class="rule-legend" id="ruleLegend"></div><span class="rule-remaining" id="unallocatedRule">100% unallocated</span></div>
+      </div>
+      <div class="pots-empty" id="potsEmpty"><span class="empty-icon"><i data-lucide="piggy-bank"></i></span><div><h3>No pots yet</h3><p>Create a pot to split your inflows.</p></div></div>
+      <div class="pots-grid" id="potsGrid" aria-label="Pot balances"></div>
+    </section>
+  </main>
+  <footer class="page-footer"><span><i data-lucide="lock-keyhole"></i>This device only</span></footer>
+</div>
+<div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="addBackdrop" aria-hidden="true" inert>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle" tabindex="-1">
+    <button class="icon-btn modal-close" id="addClose" type="button" aria-label="Close new entry"><i data-lucide="x"></i></button>
+    <div class="modal-symbol"><i data-lucide="pen-line"></i></div><h3 id="addTitle">Add entry</h3>
+    <form id="cashflowForm">
+      <fieldset class="field"><legend>Type</legend><div class="segmented"><label><input type="radio" name="type" value="inflow" checked><span class="seg-option in"><i data-lucide="arrow-down-left"></i>Inflow</span></label><label><input type="radio" name="type" value="outflow"><span class="seg-option out"><i data-lucide="arrow-up-right"></i>Outflow</span></label></div></fieldset>
+      <div class="field"><label for="descInput">Description</label><input type="text" id="descInput" placeholder="e.g. Client payment" maxlength="160" required></div>
+      <div class="field"><label for="amountInput">Amount (AED)</label><div class="amount-wrap"><span aria-hidden="true">$</span><input type="number" id="amountInput" step="0.01" min="0.01" max="999999999999.99" inputmode="decimal" placeholder="0.00" required></div></div>
+      <div class="field" id="outflowPotField" hidden><label for="outflowPot">Pay from</label><select id="outflowPot" aria-describedby="outflowBalanceHint"></select><p class="field-hint" id="outflowBalanceHint" hidden></p></div>
+      <section class="allocation-box" id="inflowAllocation" hidden><h4>Pot split</h4><div id="allocationPreview"></div></section>
+      <p class="form-error" id="entryError" role="alert" hidden></p><button type="submit" class="primary-btn submit-btn"><i data-lucide="plus"></i><span id="entrySubmitLabel">Add inflow</span></button>
+    </form>
+  </div>
+</div>
+<div class="modal-backdrop" id="catBackdrop" aria-hidden="true" inert><div class="modal modal-wide" id="catModal" role="dialog" aria-modal="true" aria-labelledby="catTitle" tabindex="-1"></div></div>
+<div class="modal-backdrop" id="detailBackdrop" aria-hidden="true" inert><div class="modal modal-wide" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle" tabindex="-1"></div></div>
+<div class="modal-backdrop" id="potDetailBackdrop" aria-hidden="true" inert><div class="modal modal-wide" id="potDetailModal" role="dialog" aria-modal="true" aria-labelledby="potDetailTitle" tabindex="-1"></div></div>
+<div class="modal-backdrop" id="potEditorBackdrop" aria-hidden="true" inert>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="potEditorTitle" tabindex="-1">
+    <button class="icon-btn modal-close" id="potEditorClose" type="button" aria-label="Close pot settings"><i data-lucide="x"></i></button>
+    <div class="modal-symbol"><i data-lucide="piggy-bank"></i></div><h3 id="potEditorTitle">New pot</h3>
+    <form id="potForm">
+      <div class="field"><label for="potNameInput">Name</label><input type="text" id="potNameInput" placeholder="e.g. Savings" maxlength="40" required></div>
+      <div class="field"><label for="potRateInput">Inflow share</label><div class="percent-wrap"><input type="number" id="potRateInput" min="0" max="100" step="0.01" inputmode="decimal" placeholder="0" aria-describedby="potCapacity" required><span aria-hidden="true">%</span></div><p class="field-hint" id="potCapacity">100% total limit.</p></div>
+      <fieldset class="field"><legend>Color</legend><div class="color-options">
+        <label><input type="radio" name="potColor" value="sage" aria-label="Sage" checked><span class="color-swatch color-sage"></span></label>
+        <label><input type="radio" name="potColor" value="blue" aria-label="Blue"><span class="color-swatch color-blue"></span></label>
+        <label><input type="radio" name="potColor" value="peach" aria-label="Peach"><span class="color-swatch color-peach"></span></label>
+        <label><input type="radio" name="potColor" value="purple" aria-label="Purple"><span class="color-swatch color-purple"></span></label>
+        <label><input type="radio" name="potColor" value="gold" aria-label="Gold"><span class="color-swatch color-gold"></span></label>
+        <label><input type="radio" name="potColor" value="rose" aria-label="Rose"><span class="color-swatch color-rose"></span></label>
+      </div></fieldset>
+      <p class="rule-notice"><strong>Recalculates all past + future inflows.</strong> Expenses keep their pot. Negative balances are allowed.</p>
+      <div class="pot-preview" id="potPreview"></div><p class="form-error" id="potError" role="alert" hidden></p>
+      <button class="primary-btn submit-btn" type="submit"><i data-lucide="check"></i><span id="potSubmitLabel">Create pot</span></button>
+      <button class="delete-btn" id="removePotBtn" type="button" hidden><i data-lucide="trash-2"></i>Remove pot</button>
+    </form>
+  </div>
+</div>
+
+<script id="ledgerModel">
+  // All money is kept in whole cents. Pot rules use hundredths of a percent.
+  const Ledger = (() => {
+    const MAX_CENTS = 99999999999999;
+    const COLORS = ['sage', 'blue', 'peach', 'purple', 'gold', 'rose'];
+    const safeSum = (a, b) => {
+      const sum = a + b;
+      if (!Number.isSafeInteger(sum)) throw new Error('The combined amount is too large to track accurately.');
+      return sum;
+    };
+    function parseDecimal(value, maximum, label) {
+      const text = String(value).trim();
+      if (!/^\d+(\.\d{1,2})?$/.test(text)) throw new Error(`${label} must be a number with at most two decimal places.`);
+      const [whole, decimals = ''] = text.split('.');
+      const units = Number(whole) * 100 + Number(decimals.padEnd(2, '0'));
+      if (!Number.isSafeInteger(units) || units > maximum) throw new Error(`${label} is too large.`);
+      return units;
+    }
+    const parseMoney = value => {
+      const cents = parseDecimal(value, MAX_CENTS, 'Amount');
+      if (cents <= 0) throw new Error('Enter an amount greater than zero.');
+      return cents;
+    };
+    const parsePercent = value => parseDecimal(value, 10000, 'Percentage');
+    const ruleTotal = pots => pots.reduce((sum, pot) => sum + pot.rateBps, 0);
+    function validate(state) {
+      if (!state || state.version !== 2 || !Array.isArray(state.pots) || !Array.isArray(state.transactions)) throw new Error('Saved ledger data could not be read.');
+      const ids = new Set();
+      for (const pot of state.pots) {
+        if (!pot || typeof pot.id !== 'string' || !pot.id || ids.has(pot.id) || typeof pot.name !== 'string' || !pot.name.trim() || !Number.isInteger(pot.rateBps) || pot.rateBps < 0 || pot.rateBps > 10000 || !COLORS.includes(pot.color)) throw new Error('A pot has invalid saved settings.');
+        ids.add(pot.id);
+      }
+      if (ruleTotal(state.pots) > 10000) throw new Error('Pot percentages cannot add up to more than 100%.');
+      const entryIds = new Set();
+      let inCents = 0, outCents = 0;
+      for (const entry of state.transactions) {
+        if (!entry || typeof entry.id !== 'string' || !entry.id || entryIds.has(entry.id) || typeof entry.desc !== 'string' || !entry.desc.trim() || !Number.isSafeInteger(entry.amountCents) || entry.amountCents <= 0 || entry.amountCents > MAX_CENTS || !['inflow', 'outflow'].includes(entry.type) || (entry.potId !== null && !ids.has(entry.potId)) || (entry.type === 'inflow' && entry.potId !== null)) throw new Error('An entry has invalid saved details.');
+        entryIds.add(entry.id);
+        if (entry.type === 'inflow') inCents = safeSum(inCents, entry.amountCents);
+        else outCents = safeSum(outCents, entry.amountCents);
+      }
+      return state;
+    }
+    function load(saved, legacy) {
+      if (saved !== null) return validate(JSON.parse(saved));
+      const samples = [
+        { id: 1, desc: 'Client Project Advance', amount: 4850, type: 'inflow', date: 'Just now' },
+        { id: 2, desc: 'AWS & Cloud Hosting', amount: 320, type: 'outflow', date: 'Upcoming' },
+        { id: 3, desc: 'Software Subscriptions', amount: 149, type: 'outflow', date: 'Upcoming' }
+      ];
+      const entries = legacy === null ? samples : JSON.parse(legacy);
+      if (!Array.isArray(entries)) throw new Error('Saved entries could not be read.');
+      const transactions = entries.map(entry => ({ id: String(entry.id), desc: entry.desc, amountCents: Math.round(entry.amount * 100), type: entry.type, date: entry.date || 'Scheduled', potId: null }));
+      return validate({ version: 2, pots: [], transactions });
+    }
+    function allocate(amountCents, pots) {
+      const total = ruleTotal(pots);
+      if (!Number.isSafeInteger(amountCents) || amountCents < 0 || total > 10000 || pots.some(p => !Number.isInteger(p.rateBps) || p.rateBps < 0 || p.rateBps > 10000)) throw new Error('Invalid inflow or allocation rule.');
+      // The unallocated portion participates in rounding, so every cent has a home.
+      const buckets = [...pots.map(pot => ({ potId: pot.id, rateBps: pot.rateBps })), { potId: null, rateBps: 10000 - total }].map((bucket, index) => {
+        const product = BigInt(amountCents) * BigInt(bucket.rateBps);
+        return { ...bucket, index, cents: Number(product / 10000n), remainder: Number(product % 10000n) };
+      });
+      const leftover = amountCents - buckets.reduce((sum, bucket) => sum + bucket.cents, 0);
+      const ranked = [...buckets].sort((a, b) => b.remainder - a.remainder || a.index - b.index);
+      for (let i = 0; i < leftover; i++) ranked[i].cents++;
+      return buckets.map(({ potId, cents }) => ({ potId, cents }));
+    }
+    function summarize(state) {
+      validate(state);
+      const pots = new Map(state.pots.map(pot => [pot.id, { funded: 0, spent: 0, balance: 0 }]));
+      const unallocated = { funded: 0, spent: 0, balance: 0 };
+      const allocations = new Map();
+      let totalIn = 0, totalOut = 0;
+      for (const entry of state.transactions) {
+        if (entry.type === 'inflow') {
+          totalIn = safeSum(totalIn, entry.amountCents);
+          const split = allocate(entry.amountCents, state.pots);
+          allocations.set(entry.id, split);
+          for (const part of split) {
+            const bucket = part.potId === null ? unallocated : pots.get(part.potId);
+            bucket.funded = safeSum(bucket.funded, part.cents);
+          }
+        } else {
+          totalOut = safeSum(totalOut, entry.amountCents);
+          const bucket = entry.potId === null ? unallocated : pots.get(entry.potId);
+          bucket.spent = safeSum(bucket.spent, entry.amountCents);
+        }
+      }
+      for (const bucket of [...pots.values(), unallocated]) bucket.balance = bucket.funded - bucket.spent;
+      return { totalIn, totalOut, net: totalIn - totalOut, pots, unallocated, allocations };
+    }
+    function savePot(state, pot) {
+      const name = String(pot.name || '').trim();
+      if (!name || name.length > 40) throw new Error('Give your pot a name of 1–40 characters.');
+      if (state.pots.some(existing => existing.id !== pot.id && existing.name.toLowerCase() === name.toLowerCase())) throw new Error('You already have a pot with that name.');
+      const existing = state.pots.some(existing => existing.id === pot.id);
+      const clean = { id: pot.id, name, rateBps: pot.rateBps, color: pot.color };
+      const pots = existing ? state.pots.map(item => item.id === pot.id ? clean : item) : [...state.pots, clean];
+      return validate({ ...state, pots });
+    }
+    function removePot(state, id) {
+      // Assigned spending becomes unallocated; the ledger's net total never changes.
+      return validate({ ...state, pots: state.pots.filter(pot => pot.id !== id), transactions: state.transactions.map(entry => entry.potId === id ? { ...entry, potId: null } : entry) });
+    }
+    function addEntry(state, entry) { return validate({ ...state, transactions: [entry, ...state.transactions] }); }
+    function assignOutflow(state, entryId, potId) {
+      const entry = state.transactions.find(entry => entry.id === entryId);
+      if (!entry || entry.type !== 'outflow') throw new Error('Choose an outflow to assign.');
+      return validate({ ...state, transactions: state.transactions.map(entry => entry.id === entryId ? { ...entry, potId } : entry) });
+    }
+    function removeEntry(state, id) { return validate({ ...state, transactions: state.transactions.filter(entry => entry.id !== id) }); }
+    function clearEntries(state) { return { ...state, transactions: [] }; }
+    return Object.freeze({ COLORS, MAX_CENTS, parseMoney, parsePercent, ruleTotal, validate, load, allocate, summarize, savePot, removePot, addEntry, assignOutflow, removeEntry, clearEntries });
+  })();
+</script>
+<script id="ledgerUI">
+  const $ = id => document.getElementById(id);
+  const icons = () => { if (window.lucide) lucide.createIcons(); };
+  const fmt = cents => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'AED', minimumFractionDigits: 2 }).format(cents / 100);
+  const percent = bps => `${Number((bps / 100).toFixed(2))}%`;
+  const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  const makeId = prefix => `${prefix}_${globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`}`;
+  const STATE_KEY = 'Flow Purse_ledger_v2';
+  let saved = null, legacy = null, storageStatus = 'local', loadError = '';
+  try { saved = localStorage.getItem(STATE_KEY); legacy = localStorage.getItem('Flow Purse_transactions'); }
+  catch (_) { storageStatus = 'session'; }
+  let state;
+  try { state = Ledger.load(saved, legacy); if (saved !== null) storageStatus = 'saved'; }
+  catch (error) { state = { version: 2, pots: [], transactions: [] }; loadError = error.message; }
+  let summary = Ledger.summarize(state);
+  let activeBackdrop = null, returnFocus = null, currentCategory = 'all', currentPotId = null, editingPotId = null;
+  let detailOrigin = { kind: 'category', category: 'all' };
+  const animationFrames = new WeakMap();
+  const potName = id => state.pots.find(pot => pot.id === id)?.name || 'Unallocated';
+  const potColor = id => state.pots.find(pot => pot.id === id)?.color || 'neutral';
+  function announce(message) { $('announcement').textContent = message; }
+  function showError(id, message = '') { $(id).textContent = message; $(id).hidden = !message; }
+  function commit(next) {
+    if (loadError) throw new Error('Your saved ledger could not be read. Your existing saved data has been left intact.');
+    Ledger.validate(next);
+    state = next;
+    try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); storageStatus = 'saved'; }
+    catch (_) { storageStatus = 'session'; }
+    updateUI();
+  }
+  function updateSaveStatus() {
+    const message = loadError ? 'Data issue' : storageStatus === 'session' ? 'Unsaved' : storageStatus === 'saved' ? 'Saved' : 'Local';
+    $('saveStatus').innerHTML = `<i data-lucide="${loadError || storageStatus === 'session' ? 'circle-alert' : 'check-check'}"></i><span>${message}</span>`;
+    $('saveStatus').dataset.warning = String(!!loadError || storageStatus === 'session');
+    $('saveStatus').title = loadError ? `${loadError} Existing saved data has not been changed.` : storageStatus === 'session' ? 'Browser storage is unavailable. Keep this page open to retain your entries.' : 'Entries, pot rules, and allocations stay in this browser on this device.';
+    $('storageError').hidden = !loadError;
+    $('storageError').textContent = loadError ? `${loadError} Existing saved data has been left intact; changes are disabled.` : '';
+    $('fabBtn').disabled = !!loadError;
+    $('addPotBtn').disabled = !!loadError;
+  }
+  function animateNumber(element, to) {
+    cancelAnimationFrame(animationFrames.get(element));
+    const from = Number(element.dataset.value || 0);
+    element.dataset.value = to;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { element.textContent = fmt(to); return; }
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / 350, 1);
+      element.textContent = fmt(Math.round(from + (to - from) * (1 - Math.pow(1 - progress, 3))));
+      if (progress < 1) animationFrames.set(element, requestAnimationFrame(step));
+    }
+    animationFrames.set(element, requestAnimationFrame(step));
+  }
+  function updateUI() {
+    summary = Ledger.summarize(state);
+    animateNumber($('totalInflow'), summary.totalIn);
+    animateNumber($('totalOutflow'), summary.totalOut);
+    animateNumber($('netFlow'), summary.net);
+    $('netFoot').textContent = summary.net > 0 ? 'Surplus' : summary.net < 0 ? 'Deficit' : 'Balanced';
+    document.querySelector('.tally-item.net').dataset.status = summary.net < 0 ? 'negative' : 'positive';
+    const inCount = state.transactions.filter(entry => entry.type === 'inflow').length;
+    $('inflowFoot').textContent = `${inCount} ${inCount === 1 ? 'entry' : 'entries'}`;
+    const outCount = state.transactions.length - inCount;
+    $('outflowFoot').textContent = `${outCount} ${outCount === 1 ? 'entry' : 'entries'}`;
+    document.querySelectorAll('.tally-item').forEach(card => {
+      const category = card.dataset.category;
+      const amount = category === 'inflow' ? summary.totalIn : category === 'outflow' ? summary.totalOut : summary.net;
+      card.setAttribute('aria-label', `${category === 'all' ? 'Net balance' : category === 'inflow' ? 'Inflow' : 'Outflow'} ${fmt(amount)}. View entries.`);
+    });
+    renderPots();
+    updateSaveStatus();
+    icons();
+  }
+  function potCardMarkup(pot, balance, unallocated = false) {
+    const overdrawn = balance.balance < 0;
+    const attributes = unallocated ? 'id="unallocatedCard"' : `data-pot-id="${escapeHTML(pot.id)}"`;
+    const label = `${pot.name}, balance ${fmt(balance.balance)}, ${percent(pot.rateBps)} of each inflow.${overdrawn ? ' Overdrawn.' : ''} View details.`;
+    return `<button class="pot-card color-${pot.color}${unallocated ? ' unallocated-card' : ''}${overdrawn ? ' is-overdrawn' : ''}" type="button" ${attributes} aria-label="${escapeHTML(label)}"><span class="pot-card-top"><span class="pot-icon" aria-hidden="true"><i data-lucide="${unallocated ? 'wallet' : 'piggy-bank'}"></i></span><span class="pot-rule">${percent(pot.rateBps)} of inflow</span><i data-lucide="chevron-right" class="entry-chevron" aria-hidden="true"></i></span><span class="pot-name">${escapeHTML(pot.name)}</span><strong class="pot-balance ${overdrawn ? 'out' : ''}">${fmt(balance.balance)}</strong><span class="pot-status out" ${overdrawn ? '' : 'hidden'}>Overdrawn</span></button>`;
+  }
+  function renderPots() {
+    const totalBps = Ledger.ruleTotal(state.pots);
+    const remainingBps = 10000 - totalBps;
+    $('potCount').textContent = state.pots.length;
+    $('allocatedRule').textContent = percent(totalBps);
+    $('unallocatedRule').textContent = remainingBps ? `${percent(remainingBps)} unallocated` : 'Fully allocated';
+    $('unallocatedRule').classList.toggle('complete', remainingBps === 0);
+    $('ruleBar').innerHTML = state.pots.filter(pot => pot.rateBps > 0).map(pot => `<span class="rule-segment color-${pot.color}" style="width:${pot.rateBps / 100}%" title="${escapeHTML(pot.name)}: ${percent(pot.rateBps)}"></span>`).join('');
+    $('ruleBar').setAttribute('aria-label', `${percent(totalBps)} of each inflow allocated to pots; ${percent(remainingBps)} unallocated.`);
+    $('ruleLegend').innerHTML = state.pots.filter(pot => pot.rateBps > 0).map(pot => `<span class="rule-legend-item"><span class="pot-dot color-${pot.color}"></span><span class="rule-legend-name">${escapeHTML(pot.name)}</span><strong>${percent(pot.rateBps)}</strong></span>`).join('') || '<span class="rule-empty">No rules yet</span>';
+    $('potsEmpty').hidden = !!state.pots.length;
+    $('potsGrid').innerHTML = state.pots.map(pot => potCardMarkup(pot, summary.pots.get(pot.id))).join('') + potCardMarkup({ name: 'Unallocated', color: 'neutral', rateBps: remainingBps }, summary.unallocated, true);
+    $('potsGrid').querySelectorAll('[data-pot-id]').forEach(button => button.addEventListener('click', () => openPot(button.dataset.potId)));
+    $('unallocatedCard').addEventListener('click', () => openPot(null));
+
+  }
+  function entryMarkup(entry, allocatedCents) {
+    const isIn = entry.type === 'inflow';
+    const amount = allocatedCents === undefined ? entry.amountCents : allocatedCents;
+    const subtitle = allocatedCents !== undefined && isIn ? `${fmt(entry.amountCents)} inflow · allocated share` : `${entry.date || 'Scheduled'}${!isIn ? ` · ${potName(entry.potId)}` : ''}`;
+    return `<button class="entry-row" type="button" data-id="${escapeHTML(entry.id)}"><span class="entry-main"><span class="entry-icon ${isIn ? 'in' : 'out'}"><i data-lucide="${isIn ? 'arrow-down-left' : 'arrow-up-right'}"></i></span><span class="entry-copy"><span class="entry-name">${escapeHTML(entry.desc)}</span><span class="entry-date">${escapeHTML(subtitle)}</span></span></span><span class="entry-amount ${isIn ? 'in' : ''}">${isIn ? '+' : '−'}${fmt(amount)}</span><i data-lucide="chevron-right" class="entry-chevron"></i></button>`;
+  }
+  function bindRows(container, origin) {
+    container.querySelectorAll('[data-id]').forEach(row => row.addEventListener('click', () => { detailOrigin = origin; openDetail(row.dataset.id); }));
+  }
+  function showModal(backdrop, focusTarget) {
+    const previous = activeBackdrop;
+    if (!previous) returnFocus = document.activeElement;
+    activeBackdrop = backdrop;
+    backdrop.inert = false;
+    backdrop.setAttribute('aria-hidden', 'false');
+    backdrop.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    (focusTarget || backdrop.querySelector('.modal')).focus({ preventScroll: true });
+    $('appShell').inert = true;
+    if (previous && previous !== backdrop) { previous.classList.remove('show'); previous.inert = true; previous.setAttribute('aria-hidden', 'true'); }
+  }
+  function closeModal() {
+    if (!activeBackdrop) return;
+    const closing = activeBackdrop;
+    activeBackdrop = null;
+    $('appShell').inert = false;
+    document.body.style.overflow = '';
+    (returnFocus?.isConnected ? returnFocus : $('fabBtn')).focus({ preventScroll: true });
+    closing.classList.remove('show'); closing.inert = true; closing.setAttribute('aria-hidden', 'true');
+  }
+  function potOptions(selected = null) {
+    const balances = [{ id: null, name: 'Unallocated', balance: summary.unallocated.balance }, ...state.pots.map(pot => ({ ...pot, balance: summary.pots.get(pot.id).balance }))];
+    return balances.map(pot => `<option value="${escapeHTML(pot.id || '')}" ${pot.id === selected ? 'selected' : ''}>${escapeHTML(pot.name)} · ${fmt(pot.balance)}</option>`).join('');
+  }
+  function allocationMarkup(split) {
+    return split.filter(part => part.cents > 0).map(part => `<div class="allocation-row"><span><span class="pot-dot color-${potColor(part.potId)}"></span>${escapeHTML(potName(part.potId))}</span><strong>${fmt(part.cents)}</strong></div>`).join('');
+  }
+  function openAdd(type = 'inflow', selectedPot = null) {
+    $('cashflowForm').reset();
+    document.querySelectorAll('input[name="type"]').forEach(input => input.checked = input.value === type);
+    $('outflowPot').innerHTML = potOptions(selectedPot);
+    showError('entryError');
+    renderEntryPreview();
+    showModal($('addBackdrop'), $('descInput'));
+  }
+  function renderEntryPreview() {
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const inflow = type === 'inflow';
+    $('outflowPotField').hidden = inflow;
+    $('entrySubmitLabel').textContent = inflow ? 'Add inflow' : 'Add outflow';
+    let cents = 0;
+    try { cents = Ledger.parseMoney($('amountInput').value); } catch (_) {}
+    $('inflowAllocation').hidden = !inflow || !cents;
+    if (inflow) {
+      $('allocationPreview').innerHTML = cents ? allocationMarkup(Ledger.allocate(cents, state.pots)) : '';
+    } else {
+      const id = $('outflowPot').value || null;
+      const balance = (id === null ? summary.unallocated : summary.pots.get(id)).balance;
+      const after = balance - cents;
+      $('outflowBalanceHint').hidden = !cents;
+      $('outflowBalanceHint').textContent = `After: ${fmt(after)}${after < 0 ? ' · Overdrawn (allowed)' : ''}`;
+      $('outflowBalanceHint').classList.toggle('out', after < 0);
+    }
+    icons();
+  }
+  $('fabBtn').addEventListener('click', () => openAdd());
+  $('addClose').addEventListener('click', closeModal);
+  document.querySelectorAll('input[name="type"]').forEach(input => input.addEventListener('change', renderEntryPreview));
+  $('amountInput').addEventListener('input', renderEntryPreview);
+  $('outflowPot').addEventListener('change', renderEntryPreview);
+  $('cashflowForm').addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+      const desc = $('descInput').value.trim();
+      if (!desc) throw new Error('Add a description for this entry.');
+      const type = document.querySelector('input[name="type"]:checked').value;
+      const entry = { id: makeId('entry'), desc, amountCents: Ledger.parseMoney($('amountInput').value), type, date: 'Scheduled', potId: type === 'outflow' ? $('outflowPot').value || null : null };
+      commit(Ledger.addEntry(state, entry));
+      closeModal();
+      announce(`${desc} added. Pot balances updated.`);
+    } catch (error) { showError('entryError', error.message); }
+  });
+  const catMeta = {
+    inflow: { title: 'Total inflow', sub: 'Income and the pot allocations behind it.', icon: 'arrow-down-left' },
+    outflow: { title: 'Total outflow', sub: 'Expenses and the pots they are paid from.', icon: 'arrow-up-right' },
+    all: { title: 'Net balance', sub: 'Every inflow and outflow behind your net position.', icon: 'wallet' }
+  };
+  function openCategory(category) {
+    currentCategory = category;
+    const meta = catMeta[category];
+    const items = category === 'all' ? state.transactions : state.transactions.filter(entry => entry.type === category);
+    const total = category === 'inflow' ? summary.totalIn : category === 'outflow' ? summary.totalOut : summary.net;
+    $('catModal').innerHTML = `<button class="icon-btn modal-close" id="catClose" type="button" aria-label="Close entry list"><i data-lucide="x"></i></button><div class="modal-symbol"><i data-lucide="${meta.icon}"></i></div><h3 id="catTitle">${meta.title}</h3><div class="category-summary"><strong>${fmt(total)}</strong><span>${items.length} ${items.length === 1 ? 'entry' : 'entries'}</span></div><div class="cat-list">${items.length ? items.map(entry => entryMarkup(entry)).join('') : '<div class="empty-state"><p>No entries yet.</p></div>'}</div><div class="modal-actions"><button class="primary-btn" type="button" id="categoryAdd"><i data-lucide="plus"></i>Add ${category === 'all' ? 'entry' : category}</button>${category === 'all' && items.length ? '<button class="text-btn" type="button" id="clearBtn"><i data-lucide="trash-2"></i>Clear all entries</button>' : ''}</div>`;
+    $('catClose').addEventListener('click', closeModal);
+    $('categoryAdd').addEventListener('click', () => openAdd(category === 'outflow' ? 'outflow' : 'inflow'));
+    $('clearBtn')?.addEventListener('click', () => {
+      if (confirm('Clear all entries? Pot rules will stay, and every pot balance will reset to zero.')) { commit(Ledger.clearEntries(state)); openCategory('all'); announce('All entries cleared. Pot rules kept.'); }
+    });
+    bindRows($('catModal'), { kind: 'category', category });
+    icons(); showModal($('catBackdrop'));
+  }
+  document.querySelectorAll('.tally-item').forEach(button => button.addEventListener('click', () => openCategory(button.dataset.category)));
+  function openPot(id) {
+    currentPotId = id;
+    const pot = state.pots.find(pot => pot.id === id);
+    if (id !== null && !pot) { closeModal(); return; }
+    const balance = id === null ? summary.unallocated : summary.pots.get(id);
+    const bps = pot ? pot.rateBps : 10000 - Ledger.ruleTotal(state.pots);
+    const items = state.transactions.flatMap(entry => {
+      const cents = entry.type === 'inflow' ? summary.allocations.get(entry.id).find(part => part.potId === id)?.cents || 0 : entry.potId === id ? entry.amountCents : 0;
+      return cents > 0 ? [{ entry, cents }] : [];
+    });
+    $('potDetailModal').innerHTML = `<button class="icon-btn modal-close" id="potDetailClose" type="button" aria-label="Close pot"><i data-lucide="x"></i></button><div class="modal-symbol color-${potColor(id)} pot-icon"><i data-lucide="${pot ? 'piggy-bank' : 'wallet'}"></i></div><h3 id="potDetailTitle">${escapeHTML(potName(id))}</h3><p class="modal-sub">${percent(bps)} of each inflow</p><div class="detail-amount ${balance.balance < 0 ? 'out' : ''}">${fmt(balance.balance)}</div><p class="balance-caption ${balance.balance < 0 ? 'out' : ''}">${balance.balance < 0 ? 'Overdrawn' : 'Balance'}</p><div class="pot-summary"><div><span>Funded</span><strong class="in">${fmt(balance.funded)}</strong></div><div><span>Spent</span><strong>${fmt(balance.spent)}</strong></div></div><div class="modal-actions pot-detail-actions"><button class="primary-btn" type="button" id="potSpend"><i data-lucide="plus"></i>Add outflow</button>${pot ? '<button class="secondary-btn" type="button" id="potEdit"><i data-lucide="sliders-horizontal"></i>Edit rule</button>' : ''}</div><h4 class="list-heading">Activity <span class="count-badge">${items.length}</span></h4><div class="cat-list">${items.length ? items.map(({ entry, cents }) => entryMarkup(entry, cents)).join('') : '<div class="empty-state"><p>No activity yet.</p></div>'}</div>`;
+    $('potDetailClose').addEventListener('click', closeModal);
+    $('potSpend').addEventListener('click', () => openAdd('outflow', id));
+    $('potEdit')?.addEventListener('click', () => openPotEditor(id));
+    bindRows($('potDetailModal'), { kind: 'pot', id });
+    icons(); showModal($('potDetailBackdrop'));
+  }
+  function backFromDetail() {
+    if (detailOrigin.kind === 'pot') openPot(detailOrigin.id);
+    else openCategory(detailOrigin.category);
+  }
+  function openDetail(id) {
+    const entry = state.transactions.find(entry => entry.id === id);
+    if (!entry) return;
+    const isIn = entry.type === 'inflow';
+    const allocation = isIn ? `<section class="allocation-box"><h4>Pot split</h4>${allocationMarkup(summary.allocations.get(id))}<p class="field-hint">Updates with your pot rules.</p></section>` : `<form id="assignForm"><div class="field"><label for="assignPot">Paid from</label><select id="assignPot">${potOptions(entry.potId)}</select><p class="field-hint" id="assignHint">Changing the pot updates both balances.</p></div><button class="secondary-btn assign-btn" id="assignSubmit" type="submit" disabled>Save allocation</button><p class="form-error" id="assignError" role="alert" hidden></p></form>`;
+    $('detailModal').innerHTML = `<button class="icon-btn modal-close" id="detailClose" type="button" aria-label="Close entry details"><i data-lucide="x"></i></button><button class="btn-back" id="detailBack" type="button"><i data-lucide="chevron-left"></i>Back to ${detailOrigin.kind === 'pot' ? 'pot' : 'list'}</button><span class="detail-badge ${isIn ? 'in' : 'out'}"><i data-lucide="${isIn ? 'arrow-down-left' : 'arrow-up-right'}"></i>${isIn ? 'Inflow' : 'Outflow'}</span><h3 id="detailTitle">${escapeHTML(entry.desc)}</h3><div class="detail-amount ${isIn ? 'in' : 'out'}">${isIn ? '+' : '−'}${fmt(entry.amountCents)}</div>${allocation}<div class="detail-row"><span>Status</span><span>${escapeHTML(entry.date || 'Scheduled')}</span></div><div class="detail-row"><span>Reference ID</span><span>#${escapeHTML(entry.id.slice(-6))}</span></div><button class="delete-btn" id="detailDelete" type="button"><i data-lucide="trash-2"></i>Delete entry</button><p class="form-error" id="detailError" role="alert" hidden></p>`;
+    $('detailClose').addEventListener('click', closeModal);
+    $('detailBack').addEventListener('click', backFromDetail);
+    $('detailDelete').addEventListener('click', () => {
+      try { commit(Ledger.removeEntry(state, id)); backFromDetail(); announce(`${entry.desc} deleted. Pot balances updated.`); }
+      catch (error) { showError('detailError', error.message); }
+    });
+    if (!isIn) {
+      $('assignPot').addEventListener('change', () => {
+        const nextId = $('assignPot').value || null;
+        $('assignSubmit').disabled = nextId === entry.potId;
+        const after = Ledger.summarize(Ledger.assignOutflow(state, id, nextId));
+        const balance = (nextId === null ? after.unallocated : after.pots.get(nextId)).balance;
+        $('assignHint').textContent = `After: ${fmt(balance)}${balance < 0 ? ' · Overdrawn (allowed)' : ''}`;
+        $('assignHint').classList.toggle('out', balance < 0);
+      });
+      $('assignForm').addEventListener('submit', event => {
+        event.preventDefault();
+        try { commit(Ledger.assignOutflow(state, id, $('assignPot').value || null)); openDetail(id); announce('Outflow allocation saved. Both balances updated.'); }
+        catch (error) { showError('assignError', error.message); }
+      });
+    }
+    icons(); showModal($('detailBackdrop'));
+  }
+  function openPotEditor(id = null) {
+    editingPotId = id;
+    const pot = state.pots.find(pot => pot.id === id);
+    $('potForm').reset();
+    $('potEditorTitle').textContent = pot ? 'Edit pot' : 'New pot';
+    $('potNameInput').value = pot?.name || '';
+    $('potRateInput').value = pot ? pot.rateBps / 100 : '';
+    $('potRateInput').max = (10000 - Ledger.ruleTotal(state.pots.filter(item => item.id !== id))) / 100;
+    const color = pot?.color || Ledger.COLORS[state.pots.length % Ledger.COLORS.length];
+    document.querySelectorAll('input[name="potColor"]').forEach(input => input.checked = input.value === color);
+    $('potSubmitLabel').textContent = pot ? 'Save pot' : 'Create pot';
+    $('removePotBtn').hidden = !pot;
+    showError('potError');
+    renderPotPreview(); showModal($('potEditorBackdrop'), $('potNameInput'));
+  }
+  function renderPotPreview() {
+    const otherRules = Ledger.ruleTotal(state.pots.filter(pot => pot.id !== editingPotId));
+    $('potCapacity').textContent = `${percent(10000 - otherRules)} available · 100% total limit`;
+    if ($('potRateInput').value === '') { $('potPreview').innerHTML = '<p>Enter a percentage to preview.</p>'; return; }
+    try {
+      const rateBps = Ledger.parsePercent($('potRateInput').value);
+      if (otherRules + rateBps > 10000) throw new Error(`You have ${percent(10000 - otherRules)} available. Reduce this percentage or another pot’s rule.`);
+      const id = editingPotId || 'new-pot-preview';
+      const draftPots = [...state.pots.filter(pot => pot.id !== editingPotId), { id, name: 'Preview', color: 'sage', rateBps }];
+      // Keep the original order when editing so rounding ties remain stable.
+      const pots = editingPotId ? state.pots.map(pot => pot.id === editingPotId ? { ...pot, rateBps } : pot) : draftPots;
+      const preview = Ledger.summarize({ ...state, pots });
+      const balance = preview.pots.get(id);
+      $('potPreview').innerHTML = `<div class="allocation-row"><span>Funded</span><strong>${fmt(balance.funded)}</strong></div><div class="allocation-row"><span>Spent</span><strong>${fmt(balance.spent)}</strong></div><div class="allocation-row preview-total"><span>New balance</span><strong class="${balance.balance < 0 ? 'out' : ''}">${fmt(balance.balance)}</strong></div>`;
+      showError('potError');
+    } catch (error) { $('potPreview').innerHTML = '<p>Adjust the percentage to continue.</p>'; showError('potError', error.message); }
+  }
+  $('addPotBtn').addEventListener('click', () => openPotEditor());
+  $('potEditorClose').addEventListener('click', closeModal);
+  $('potRateInput').addEventListener('input', renderPotPreview);
+  $('potForm').addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+      const id = editingPotId || makeId('pot');
+      const pot = { id, name: $('potNameInput').value, rateBps: Ledger.parsePercent($('potRateInput').value), color: document.querySelector('input[name="potColor"]:checked').value };
+      commit(Ledger.savePot(state, pot));
+      openPot(id); announce('Pot saved. Existing inflows reallocated using your updated rules.');
+    } catch (error) { showError('potError', error.message); }
+  });
+  $('removePotBtn').addEventListener('click', () => {
+    const name = potName(editingPotId);
+    if (confirm(`Remove “${name}”? Its assigned outflows will move to Unallocated. Existing inflows will be recalculated using the remaining pot rules.`)) {
+      try { commit(Ledger.removePot(state, editingPotId)); closeModal(); announce(`${name} removed. Balances recalculated.`); }
+      catch (error) { showError('potError', error.message); }
+    }
+  });
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.addEventListener('click', event => { if (event.target === backdrop) closeModal(); }));
+  document.addEventListener('keydown', event => {
+    if (!activeBackdrop) return;
+    if (event.key === 'Escape') { event.preventDefault(); closeModal(); return; }
+    if (event.key === 'Tab') {
+      const elements = [...activeBackdrop.querySelectorAll('button:not(:disabled), input:not(:disabled), select:not(:disabled), [tabindex="0"]')].filter(element => !element.closest('[hidden]') && (element.type !== 'radio' || element.checked) && element.getClientRects().length);
+      const first = elements[0], last = elements[elements.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === activeBackdrop.querySelector('.modal'))) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+  });
+  function syncTheme() {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    $('themeToggle').setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
+    $('themeToggle').title = `Switch to ${dark ? 'light' : 'dark'} theme`;
+    document.querySelector('meta[name="theme-color"]').content = dark ? '#111c17' : '#f5f7f4';
+  }
+  $('themeToggle').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('Flow Purse_theme', next); } catch (_) {}
+    syncTheme();
+  });
+  $('todayLabel').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  $('todayLabel').title = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  syncTheme(); updateUI();
+</script>
+</body>
+</html>
