@@ -106,6 +106,7 @@
   h1 { font: 600 clamp(27px, 3.2vw, 37px)/1.25 var(--heading); letter-spacing: -1.5px; }
   .intro p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 10px; }
   .primary-btn { background: var(--accent); color: var(--surface); border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-size: 12px; font-weight: 600; padding: 13px 18px; white-space: nowrap; min-height: 44px; }
+  .primary-btn.entry-btn { border-radius: 999px; }
   .primary-btn:hover { background: var(--accent-hover); box-shadow: 0 3px 12px rgba(27, 64, 42, .12); }
   .primary-btn:active { transform: translateY(1px); }
   .primary-btn svg { width: 16px; height: 16px; }
@@ -531,7 +532,7 @@
   <main>
     <section class="intro" aria-labelledby="pageTitle">
       <h1 id="pageTitle">Cashflow</h1>
-      <button class="primary-btn" id="fabBtn" type="button"><i data-lucide="plus"></i>Add entry</button>
+      <button class="primary-btn entry-btn" id="fabBtn" type="button"><i data-lucide="plus"></i>Add entry</button>
     </section>
     <div class="overview-meta"><span><i data-lucide="calendar-days"></i><span id="todayLabel"></span></span><span class="currency-label">PROJECTION · AED</span></div>
     <section class="tally" aria-label="Cashflow overview">
@@ -576,7 +577,7 @@
       <div class="field"><label for="amountInput">Amount (AED)</label><div class="amount-wrap"><span aria-hidden="true">$</span><input type="number" id="amountInput" step="0.01" min="0.01" max="999999999999.99" inputmode="decimal" placeholder="0.00" required></div></div>
       <div class="field" id="outflowPotField" hidden><label for="outflowPot">Pay from</label><select id="outflowPot" aria-describedby="outflowBalanceHint"></select><p class="field-hint" id="outflowBalanceHint" hidden></p></div>
       <section class="allocation-box" id="inflowAllocation" hidden><h4>Pot split</h4><div id="allocationPreview"></div></section>
-      <p class="form-error" id="entryError" role="alert" hidden></p><button type="submit" class="primary-btn submit-btn"><i data-lucide="plus"></i><span id="entrySubmitLabel">Add inflow</span></button>
+      <p class="form-error" id="entryError" role="alert" hidden></p><button type="submit" class="primary-btn submit-btn entry-btn"><i data-lucide="plus"></i><span id="entrySubmitLabel">Add inflow</span></button>
     </form>
   </div>
 </div>
@@ -905,7 +906,7 @@
     const meta = catMeta[category];
     const items = category === 'all' ? state.transactions : state.transactions.filter(entry => entry.type === category);
     const total = category === 'inflow' ? summary.totalIn : category === 'outflow' ? summary.totalOut : summary.net;
-    $('catModal').innerHTML = `<button class="icon-btn modal-close" id="catClose" type="button" aria-label="Close entry list"><i data-lucide="x"></i></button><div class="modal-symbol"><i data-lucide="${meta.icon}"></i></div><h3 id="catTitle">${meta.title}</h3><div class="category-summary"><strong>${fmt(total)}</strong><span>${items.length} ${items.length === 1 ? 'entry' : 'entries'}</span></div><div class="cat-list">${items.length ? items.map(entry => entryMarkup(entry)).join('') : '<div class="empty-state"><p>No entries yet.</p></div>'}</div><div class="modal-actions"><button class="primary-btn" type="button" id="categoryAdd"><i data-lucide="plus"></i>Add ${category === 'all' ? 'entry' : category}</button>${category === 'all' && items.length ? '<button class="text-btn" type="button" id="clearBtn"><i data-lucide="trash-2"></i>Clear all entries</button>' : ''}</div>`;
+    $('catModal').innerHTML = `<button class="icon-btn modal-close" id="catClose" type="button" aria-label="Close entry list"><i data-lucide="x"></i></button><div class="modal-symbol"><i data-lucide="${meta.icon}"></i></div><h3 id="catTitle">${meta.title}</h3><div class="category-summary"><strong>${fmt(total)}</strong><span>${items.length} ${items.length === 1 ? 'entry' : 'entries'}</span></div><div class="cat-list">${items.length ? items.map(entry => entryMarkup(entry)).join('') : '<div class="empty-state"><p>No entries yet.</p></div>'}</div><div class="modal-actions"><button class="primary-btn entry-btn" type="button" id="categoryAdd"><i data-lucide="plus"></i>Add ${category === 'all' ? 'entry' : category}</button>${category === 'all' && items.length ? '<button class="text-btn" type="button" id="clearBtn"><i data-lucide="trash-2"></i>Clear all entries</button>' : ''}</div>`;
     $('catClose').addEventListener('click', closeModal);
     $('categoryAdd').addEventListener('click', () => openAdd(category === 'outflow' ? 'outflow' : 'inflow'));
     $('clearBtn')?.addEventListener('click', () => {
@@ -925,7 +926,7 @@
       const cents = entry.type === 'inflow' ? summary.allocations.get(entry.id).find(part => part.potId === id)?.cents || 0 : entry.potId === id ? entry.amountCents : 0;
       return cents > 0 ? [{ entry, cents }] : [];
     });
-    $('potDetailModal').innerHTML = `<button class="icon-btn modal-close" id="potDetailClose" type="button" aria-label="Close pot"><i data-lucide="x"></i></button><div class="modal-symbol color-${potColor(id)} pot-icon"><i data-lucide="${pot ? 'piggy-bank' : 'wallet'}"></i></div><h3 id="potDetailTitle">${escapeHTML(potName(id))}</h3><p class="modal-sub">${percent(bps)} of each inflow</p><div class="detail-amount ${balance.balance < 0 ? 'out' : ''}">${fmt(balance.balance)}</div><p class="balance-caption ${balance.balance < 0 ? 'out' : ''}">${balance.balance < 0 ? 'Overdrawn' : 'Balance'}</p><div class="pot-summary"><div><span>Funded</span><strong class="in">${fmt(balance.funded)}</strong></div><div><span>Spent</span><strong>${fmt(balance.spent)}</strong></div></div><div class="modal-actions pot-detail-actions"><button class="primary-btn" type="button" id="potSpend"><i data-lucide="plus"></i>Add outflow</button>${pot ? '<button class="secondary-btn" type="button" id="potEdit"><i data-lucide="sliders-horizontal"></i>Edit rule</button>' : ''}</div><h4 class="list-heading">Activity <span class="count-badge">${items.length}</span></h4><div class="cat-list">${items.length ? items.map(({ entry, cents }) => entryMarkup(entry, cents)).join('') : '<div class="empty-state"><p>No activity yet.</p></div>'}</div>`;
+    $('potDetailModal').innerHTML = `<button class="icon-btn modal-close" id="potDetailClose" type="button" aria-label="Close pot"><i data-lucide="x"></i></button><div class="modal-symbol color-${potColor(id)} pot-icon"><i data-lucide="${pot ? 'piggy-bank' : 'wallet'}"></i></div><h3 id="potDetailTitle">${escapeHTML(potName(id))}</h3><p class="modal-sub">${percent(bps)} of each inflow</p><div class="detail-amount ${balance.balance < 0 ? 'out' : ''}">${fmt(balance.balance)}</div><p class="balance-caption ${balance.balance < 0 ? 'out' : ''}">${balance.balance < 0 ? 'Overdrawn' : 'Balance'}</p><div class="pot-summary"><div><span>Funded</span><strong class="in">${fmt(balance.funded)}</strong></div><div><span>Spent</span><strong>${fmt(balance.spent)}</strong></div></div><div class="modal-actions pot-detail-actions"><button class="primary-btn entry-btn" type="button" id="potSpend"><i data-lucide="plus"></i>Add outflow</button>${pot ? '<button class="secondary-btn" type="button" id="potEdit"><i data-lucide="sliders-horizontal"></i>Edit rule</button>' : ''}</div><h4 class="list-heading">Activity <span class="count-badge">${items.length}</span></h4><div class="cat-list">${items.length ? items.map(({ entry, cents }) => entryMarkup(entry, cents)).join('') : '<div class="empty-state"><p>No activity yet.</p></div>'}</div>`;
     $('potDetailClose').addEventListener('click', closeModal);
     $('potSpend').addEventListener('click', () => openAdd('outflow', id));
     $('potEdit')?.addEventListener('click', () => openPotEditor(id));
