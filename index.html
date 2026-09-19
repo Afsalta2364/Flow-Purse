@@ -1006,10 +1006,12 @@
   $('potForm').addEventListener('submit', event => {
     event.preventDefault();
     try {
+      const isNew = !editingPotId;
       const id = editingPotId || makeId('pot');
       const pot = { id, name: $('potNameInput').value, rateBps: Ledger.parsePercent($('potRateInput').value), color: document.querySelector('input[name="potColor"]:checked').value };
       commit(Ledger.savePot(state, pot));
-      openPot(id); announce('Pot saved. Existing inflows reallocated using your updated rules.');
+      if (isNew) { closeModal(); announce('Pot created.'); }
+      else { openPot(id); announce('Pot saved. Existing inflows reallocated using your updated rules.'); }
     } catch (error) { showError('potError', error.message); }
   });
   $('removePotBtn').addEventListener('click', () => {
