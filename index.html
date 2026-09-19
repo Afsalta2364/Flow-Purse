@@ -563,7 +563,7 @@
       <div class="pots-grid" id="potsGrid" aria-label="Pot balances"></div>
     </section>
   </main>
-  <footer class="page-footer"><span><i data-lucide="lock-keyhole"></i>This device only</span></footer>
+  <footer class="page-footer"><span><i data-lucide="lock-keyhole"></i>This device only</span><span><i data-lucide="feather"></i>Prepared by Afsal</span><span>© <span id="footerYear"></span> Afsal. All rights reserved.</span></footer>
 </div>
 <div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
 <div class="modal-backdrop" id="addBackdrop" aria-hidden="true" inert>
@@ -1041,6 +1041,7 @@
   });
   $('todayLabel').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   $('todayLabel').title = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  $('footerYear').textContent = new Date().getFullYear();
   syncTheme(); updateUI();
 </script>
 </body>
