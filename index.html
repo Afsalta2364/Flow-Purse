@@ -115,7 +115,9 @@
   .overview-meta { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 11px; margin-bottom: 14px; gap: 12px; }
   .overview-meta > span { display: flex; align-items: center; gap: 6px; }
   .overview-meta svg { width: 13px; height: 13px; }
-  .currency-label { letter-spacing: 1px; font-size: 10px; }
+  .currency-label { letter-spacing: 1px; font-size: 10px; display: inline-flex; align-items: center; gap: 5px; }
+  .currency-select { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font: inherit; font-size: 10px; letter-spacing: 1px; padding: 3px 5px; cursor: pointer; }
+  .currency-select:hover { border-color: var(--line-strong); color: var(--ink); }
   .tally { display: grid; grid-template-columns: 1.12fr 1fr 1fr; gap: 18px; margin-bottom: 28px; }
   .tally-item { position: relative; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 23px 24px 20px; min-width: 0; overflow: hidden; box-shadow: var(--shadow); }
   .tally-item:hover { border-color: var(--line-strong); box-shadow: 0 7px 24px rgba(28, 54, 37, .07); }
@@ -219,8 +221,8 @@
   .field input::placeholder { color: var(--muted-2); }
   .field input:focus { border-color: var(--accent); }
   .amount-wrap { position: relative; }
-  .amount-wrap input[type="number"] { padding-left: 30px; font-variant-numeric: tabular-nums; font-weight: 500; }
-  .amount-wrap span { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); color: var(--muted); }
+  .amount-wrap input[type="number"] { padding-left: 50px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .amount-wrap span { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); color: var(--muted); font-size: 12px; font-weight: 500; letter-spacing: .2px; }
   .submit-btn { width: 100%; margin-top: 5px; }
   .form-note { text-align: center; color: var(--muted); font-size: 10px; margin-top: 14px; line-height: 1.5; }
   .cat-list { margin: 0 -12px; max-height: 50vh; overflow-y: auto; }
@@ -536,21 +538,21 @@
       <h1 id="pageTitle">Cashflow</h1>
       <button class="primary-btn entry-btn icon-fab" id="fabBtn" type="button" aria-label="Add entry"><i data-lucide="plus"></i></button>
     </section>
-    <div class="overview-meta"><span><i data-lucide="calendar-days"></i><span id="todayLabel"></span></span><span class="currency-label">PROJECTION · AED</span></div>
+    <div class="overview-meta"><span><i data-lucide="calendar-days"></i><span id="todayLabel"></span></span><span class="currency-label">PROJECTION · <select id="currencySelect" class="currency-select" aria-label="Currency"></select></span></div>
     <section class="tally" aria-label="Cashflow overview">
       <button class="tally-item net" data-category="all" type="button">
         <div class="tally-label">Net balance<span class="tally-icon"><i data-lucide="wallet"></i></span></div>
-        <div class="tally-value" id="netFlow">$0.00</div>
+        <div class="tally-value" id="netFlow">0.00</div>
         <div class="tally-foot"><span class="balance-status" id="netFoot">Break-even</span><i data-lucide="arrow-up-right"></i></div>
       </button>
       <button class="tally-item inflow" data-category="inflow" type="button">
         <div class="tally-label">Inflow<span class="tally-icon"><i data-lucide="arrow-down-left"></i></span></div>
-        <div class="tally-value" id="totalInflow">$0.00</div>
+        <div class="tally-value" id="totalInflow">0.00</div>
         <div class="tally-foot"><span id="inflowFoot">0 entries</span><i data-lucide="chevron-right"></i></div>
       </button>
       <button class="tally-item outflow" data-category="outflow" type="button">
         <div class="tally-label">Outflow<span class="tally-icon"><i data-lucide="arrow-up-right"></i></span></div>
-        <div class="tally-value" id="totalOutflow">$0.00</div>
+        <div class="tally-value" id="totalOutflow">0.00</div>
         <div class="tally-foot"><span id="outflowFoot">0 entries</span><i data-lucide="chevron-right"></i></div>
       </button>
     </section>
@@ -576,7 +578,7 @@
     <form id="cashflowForm">
       <fieldset class="field"><legend>Type</legend><div class="segmented"><label><input type="radio" name="type" value="inflow" checked><span class="seg-option in"><i data-lucide="arrow-down-left"></i>Inflow</span></label><label><input type="radio" name="type" value="outflow"><span class="seg-option out"><i data-lucide="arrow-up-right"></i>Outflow</span></label></div></fieldset>
       <div class="field"><label for="descInput">Description</label><input type="text" id="descInput" placeholder="e.g. Client payment" maxlength="160" required></div>
-      <div class="field"><label for="amountInput">Amount (AED)</label><div class="amount-wrap"><span aria-hidden="true">$</span><input type="number" id="amountInput" step="0.01" min="0.01" max="999999999999.99" inputmode="decimal" placeholder="0.00" required></div></div>
+      <div class="field"><label for="amountInput" id="amountFieldLabel">Amount (AED)</label><div class="amount-wrap"><span aria-hidden="true" id="amountCurrencySymbol">AED</span><input type="number" id="amountInput" step="0.01" min="0.01" max="999999999999.99" inputmode="decimal" placeholder="0.00" required></div></div>
       <div class="field" id="outflowPotField" hidden><label for="outflowPot">Pay from</label><select id="outflowPot" aria-describedby="outflowBalanceHint"></select><p class="field-hint" id="outflowBalanceHint" hidden></p></div>
       <section class="allocation-box" id="inflowAllocation" hidden><h4>Pot split</h4><div id="allocationPreview"></div></section>
       <p class="form-error" id="entryError" role="alert" hidden></p><button type="submit" class="primary-btn submit-btn entry-btn"><i data-lucide="plus"></i><span id="entrySubmitLabel">Add inflow</span></button>
@@ -724,7 +726,23 @@
 <script id="ledgerUI">
   const $ = id => document.getElementById(id);
   const icons = () => { if (window.lucide) lucide.createIcons(); };
-  const fmt = cents => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'AED', minimumFractionDigits: 2 }).format(cents / 100);
+  const CURRENCIES = [
+    ['AED', 'UAE Dirham'], ['USD', 'US Dollar'], ['EUR', 'Euro'], ['GBP', 'British Pound'],
+    ['INR', 'Indian Rupee'], ['SAR', 'Saudi Riyal'], ['QAR', 'Qatari Riyal'], ['KWD', 'Kuwaiti Dinar'],
+    ['BHD', 'Bahraini Dinar'], ['OMR', 'Omani Rial'], ['PKR', 'Pakistani Rupee'], ['EGP', 'Egyptian Pound'],
+    ['JPY', 'Japanese Yen'], ['CNY', 'Chinese Yuan'], ['CAD', 'Canadian Dollar'], ['AUD', 'Australian Dollar'],
+  ];
+  const CURRENCY_KEY = 'Flow Purse_currency';
+  let currentCurrency = 'AED';
+  try {
+    const storedCurrency = localStorage.getItem(CURRENCY_KEY);
+    if (storedCurrency && CURRENCIES.some(([code]) => code === storedCurrency)) currentCurrency = storedCurrency;
+  } catch (_) {}
+  const fmt = cents => new Intl.NumberFormat('en-US', { style: 'currency', currency: currentCurrency, minimumFractionDigits: 2 }).format(cents / 100);
+  const currencySymbol = code => {
+    try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: code }).formatToParts(0).find(part => part.type === 'currency')?.value || code; }
+    catch (_) { return code; }
+  };
   const percent = bps => `${Number((bps / 100).toFixed(2))}%`;
   const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const makeId = prefix => `${prefix}_${globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`}`;
@@ -1032,6 +1050,18 @@
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     }
   });
+  function syncCurrencyControls() {
+    $('amountFieldLabel').textContent = `Amount (${currentCurrency})`;
+    $('amountCurrencySymbol').textContent = currencySymbol(currentCurrency);
+  }
+  $('currencySelect').innerHTML = CURRENCIES.map(([code, name]) => `<option value="${code}" ${code === currentCurrency ? 'selected' : ''}>${code} — ${name}</option>`).join('');
+  $('currencySelect').addEventListener('change', () => {
+    currentCurrency = $('currencySelect').value;
+    try { localStorage.setItem(CURRENCY_KEY, currentCurrency); } catch (_) {}
+    syncCurrencyControls();
+    updateUI();
+    announce(`Currency changed to ${currentCurrency}.`);
+  });
   function syncTheme() {
     const dark = document.documentElement.dataset.theme === 'dark';
     $('themeToggle').setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
@@ -1047,7 +1077,7 @@
   $('todayLabel').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   $('todayLabel').title = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   $('footerYear').textContent = new Date().getFullYear();
-  syncTheme(); updateUI();
+  syncTheme(); syncCurrencyControls(); updateUI();
 </script>
 </body>
 </html>
