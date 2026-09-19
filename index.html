@@ -128,7 +128,7 @@
   .outflow .tally-icon { background: var(--rust-soft); color: var(--rust); }
   .net .tally-icon { background: rgba(225, 240, 217, .1); color: var(--hero-ink); }
   .net .tally-label { color: var(--hero-muted); }
-  .tally-value { font: 600 clamp(26px, 2.9vw, 36px)/1.15 var(--heading); letter-spacing: -1.3px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; position: relative; z-index: 1; }
+  .tally-value { font: 600 clamp(26px, 2.9vw, 36px)/1.15 var(--heading); letter-spacing: -1.3px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; position: relative; z-index: 1; }
   .tally-foot { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--muted); }
   .tally-foot svg { width: 13px; height: 13px; }
   .net .tally-foot { color: var(--hero-muted); border-color: var(--hero-line); }
@@ -167,7 +167,7 @@
   .entry-name { display: block; font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .entry-date { display: block; font-size: 10px; color: var(--muted); margin-top: 5px; }
   .type-badge { justify-self: start; font-size: 9px; font-weight: 500; padding: 5px 8px; border-radius: 6px; }
-  .entry-amount { font-size: 12px; font-weight: 600; letter-spacing: -.15px; font-variant-numeric: tabular-nums; text-align: right; overflow-wrap: anywhere; }
+  .entry-amount { font-size: 12px; font-weight: 600; letter-spacing: -.15px; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; overflow: hidden; min-width: 0; }
   .entry-chevron { width: 13px; height: 13px; color: var(--muted-2); }
   .ledger-bottom { padding: 14px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .ledger-bottom span { display: inline-flex; align-items: center; gap: 5px; }
@@ -234,7 +234,7 @@
   .detail-badge { display: inline-flex; gap: 6px; align-items: center; border-radius: 7px; padding: 6px 9px; margin-bottom: 13px; font-size: 11px; background: var(--green-soft); }
   .detail-badge.out { background: var(--rust-soft); }
   .detail-badge svg { width: 13px; height: 13px; }
-  .detail-amount { font: 600 34px var(--heading); letter-spacing: -1px; margin: 12px 0 22px; overflow-wrap: anywhere; }
+  .detail-amount { font: 600 clamp(24px, 7vw, 34px) var(--heading); letter-spacing: -1px; margin: 12px 0 22px; white-space: nowrap; overflow: hidden; }
   .detail-row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 13px 0; font-size: 12px; }
   .detail-row span:first-child { color: var(--muted); }
   .delete-btn { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: var(--rust-soft); color: var(--rust); border: 1px solid transparent; border-radius: 10px; padding: 13px; margin-top: 24px; font-size: 12px; font-weight: 500; }
@@ -337,7 +337,7 @@
   .rules-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 17px; }
   .rules-heading h3 { font: 600 13px var(--heading); letter-spacing: -.15px; }
   .rule-totals { display: flex; align-items: baseline; gap: 6px; color: var(--muted); font-size: 10px; white-space: nowrap; }
-  .rule-totals strong { color: var(--ink); font: 600 23px/1 var(--heading); letter-spacing: -.8px; font-variant-numeric: tabular-nums; }
+  .rule-totals strong { color: var(--ink); font: 600 23px/1 var(--heading); letter-spacing: -.8px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; min-width: 0; }
   .rule-bar { display: flex; height: 12px; overflow: hidden; border-radius: 999px; background: var(--line); }
   .rule-segment { display: block; background: var(--pot-color); height: 100%; flex-shrink: 0; }
   .rules-footer { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px 24px; margin-top: 17px; }
@@ -359,7 +359,7 @@
   .pot-icon svg { width: 20px; height: 20px; }
   .pot-rule { flex: 1; color: var(--muted); font-size: 10px; }
   .pot-name { font: 600 14px var(--heading); margin-bottom: 8px; overflow-wrap: anywhere; }
-  .pot-balance { font: 600 clamp(25px, 2.5vw, 31px)/1.25 var(--heading); letter-spacing: -1px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .pot-balance { font: 600 clamp(25px, 2.5vw, 31px)/1.25 var(--heading); letter-spacing: -1px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; min-width: 0; }
   .pot-status { color: var(--muted); font-size: 10px; margin-top: 8px; min-height: 14px; line-height: 1.5; }
   .pot-status.out { color: var(--rust); }
   .pot-card-bottom { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 15px; display: flex; justify-content: space-between; gap: 12px; }
@@ -382,10 +382,10 @@
   .allocation-box h4 { font: 600 11px 'Inter', sans-serif; margin: 0 0 10px; }
   .allocation-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; font-size: 11px; padding: 7px 0; }
   .allocation-row > span { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
-  .allocation-row strong { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; flex-shrink: 0; }
+  .allocation-row strong { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; flex-shrink: 0; }
   .allocation-box > p, .pot-preview > p { color: var(--muted); font-size: 11px; line-height: 1.7; }
   .category-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 0 20px; border-bottom: 1px solid var(--line); margin: 18px 0 10px; }
-  .category-summary > strong { font: 600 30px var(--heading); letter-spacing: -1px; overflow-wrap: anywhere; }
+  .category-summary > strong { font: 600 clamp(20px, 7vw, 30px) var(--heading); letter-spacing: -1px; white-space: nowrap; overflow: hidden; min-width: 0; flex: 1 1 auto; }
   .category-summary > span { font-size: 11px; color: var(--muted); flex-shrink: 0; }
   .modal-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
   .modal-wide { max-width: 540px; }
@@ -396,7 +396,7 @@
   .pot-summary > div { padding: 16px; min-width: 0; }
   .pot-summary > div + div { border-left: 1px solid var(--line); }
   .pot-summary span { display: block; color: var(--muted); font-size: 10px; margin-bottom: 7px; }
-  .pot-summary strong { font: 600 18px var(--heading); letter-spacing: -.4px; overflow-wrap: anywhere; }
+  .pot-summary strong { display: block; font: 600 clamp(15px, 4vw, 18px) var(--heading); letter-spacing: -.4px; white-space: nowrap; overflow: hidden; }
   .pot-detail-actions { justify-content: flex-start; }
   .list-heading { font: 600 12px var(--heading); margin: 27px 0 9px; border-top: 1px solid var(--line); padding-top: 22px; }
   .assign-btn { width: 100%; margin-bottom: 15px; }
@@ -516,7 +516,6 @@
     .cat-list .entry-date { font-size: 11px; }
     .cat-list .entry-row { grid-template-columns: minmax(0, 1fr) 103px 10px; }
     .category-summary { margin-top: 17px; }
-    .category-summary > strong { font-size: 28px; }
     .balance-caption { font-size: 12px; }
   }
 </style>
@@ -744,6 +743,25 @@
     catch (_) { return code; }
   };
   const percent = bps => `${Number((bps / 100).toFixed(2))}%`;
+  // Numbers must stay on a single line at any screen size: fluid clamp() sizing handles the
+  // common case, this shrinks further as a fallback so long figures never wrap mid-number.
+  const NUMBER_SELECTOR = '.tally-value, .pot-balance, .entry-amount, .detail-amount, .category-summary > strong, .pot-summary strong, .allocation-row strong, .rule-totals strong';
+  const NUMBER_FLOOR_PX = 7;
+  function fitNumber(el) {
+    if (!el) return;
+    // Elements like allocation rows pair the number with a wrapping label sharing the same
+    // line; measure the row as a whole so shrinking the number is judged by whether the row fits.
+    const boundary = el.closest('.allocation-row') || el;
+    el.style.fontSize = '';
+    const base = parseFloat(getComputedStyle(el).fontSize);
+    if (!base) return;
+    let size = base;
+    while (boundary.scrollWidth > boundary.clientWidth + 1 && size > NUMBER_FLOOR_PX) {
+      size -= 0.5;
+      el.style.fontSize = `${size}px`;
+    }
+  }
+  function fitNumbers(root = document) { root.querySelectorAll(NUMBER_SELECTOR).forEach(fitNumber); }
   const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const makeId = prefix => `${prefix}_${globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`}`;
   const STATE_KEY = 'Flow Purse_ledger_v2';
@@ -783,11 +801,12 @@
     cancelAnimationFrame(animationFrames.get(element));
     const from = Number(element.dataset.value || 0);
     element.dataset.value = to;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { element.textContent = fmt(to); return; }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { element.textContent = fmt(to); fitNumber(element); return; }
     const start = performance.now();
     function step(now) {
       const progress = Math.min((now - start) / 350, 1);
       element.textContent = fmt(Math.round(from + (to - from) * (1 - Math.pow(1 - progress, 3))));
+      fitNumber(element);
       if (progress < 1) animationFrames.set(element, requestAnimationFrame(step));
     }
     animationFrames.set(element, requestAnimationFrame(step));
@@ -811,6 +830,7 @@
     renderPots();
     updateSaveStatus();
     icons();
+    fitNumbers();
   }
   function potCardMarkup(pot, balance, unallocated = false) {
     const overdrawn = balance.balance < 0;
@@ -898,6 +918,7 @@
       $('outflowBalanceHint').classList.toggle('out', after < 0);
     }
     icons();
+    fitNumbers($('cashflowForm'));
   }
   $('fabBtn').addEventListener('click', () => openAdd());
   $('addClose').addEventListener('click', closeModal);
@@ -933,7 +954,7 @@
       if (confirm('Clear all entries? Pot rules will stay, and every pot balance will reset to zero.')) { commit(Ledger.clearEntries(state)); openCategory('all'); announce('All entries cleared. Pot rules kept.'); }
     });
     bindRows($('catModal'), { kind: 'category', category });
-    icons(); showModal($('catBackdrop'));
+    icons(); fitNumbers($('catModal')); showModal($('catBackdrop'));
   }
   document.querySelectorAll('.tally-item').forEach(button => button.addEventListener('click', () => openCategory(button.dataset.category)));
   function openPot(id) {
@@ -951,7 +972,7 @@
     $('potSpend').addEventListener('click', () => openAdd('outflow', id));
     $('potEdit')?.addEventListener('click', () => openPotEditor(id));
     bindRows($('potDetailModal'), { kind: 'pot', id });
-    icons(); showModal($('potDetailBackdrop'));
+    icons(); fitNumbers($('potDetailModal')); showModal($('potDetailBackdrop'));
   }
   function backFromDetail() {
     if (detailOrigin.kind === 'pot') openPot(detailOrigin.id);
@@ -984,7 +1005,7 @@
         catch (error) { showError('assignError', error.message); }
       });
     }
-    icons(); showModal($('detailBackdrop'));
+    icons(); fitNumbers($('detailModal')); showModal($('detailBackdrop'));
   }
   function openPotEditor(id = null) {
     editingPotId = id;
@@ -1015,6 +1036,7 @@
       const preview = Ledger.summarize({ ...state, pots });
       const balance = preview.pots.get(id);
       $('potPreview').innerHTML = `<div class="allocation-row"><span>Funded</span><strong>${fmt(balance.funded)}</strong></div><div class="allocation-row"><span>Spent</span><strong>${fmt(balance.spent)}</strong></div><div class="allocation-row preview-total"><span>New balance</span><strong class="${balance.balance < 0 ? 'out' : ''}">${fmt(balance.balance)}</strong></div>`;
+      fitNumbers($('potPreview'));
       showError('potError');
     } catch (error) { $('potPreview').innerHTML = '<p>Adjust the percentage to continue.</p>'; showError('potError', error.message); }
   }
@@ -1077,6 +1099,11 @@
   $('todayLabel').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   $('todayLabel').title = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   $('footerYear').textContent = new Date().getFullYear();
+  let resizeRaf = null;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => fitNumbers());
+  });
   syncTheme(); syncCurrencyControls(); updateUI();
 </script>
 </body>
