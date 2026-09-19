@@ -107,6 +107,8 @@
   .intro p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 10px; }
   .primary-btn { background: var(--accent); color: var(--surface); border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-size: 12px; font-weight: 600; padding: 13px 18px; white-space: nowrap; min-height: 44px; }
   .primary-btn.entry-btn { border-radius: 999px; }
+  .icon-fab { width: 40px; height: 40px; padding: 0; border-radius: 50%; gap: 0; flex: none; }
+  .icon-fab svg { width: 17px; height: 17px; }
   .primary-btn:hover { background: var(--accent-hover); box-shadow: 0 3px 12px rgba(27, 64, 42, .12); }
   .primary-btn:active { transform: translateY(1px); }
   .primary-btn svg { width: 16px; height: 16px; }
@@ -532,7 +534,7 @@
   <main>
     <section class="intro" aria-labelledby="pageTitle">
       <h1 id="pageTitle">Cashflow</h1>
-      <button class="primary-btn entry-btn" id="fabBtn" type="button"><i data-lucide="plus"></i>Add entry</button>
+      <button class="primary-btn entry-btn icon-fab" id="fabBtn" type="button" aria-label="Add entry"><i data-lucide="plus"></i></button>
     </section>
     <div class="overview-meta"><span><i data-lucide="calendar-days"></i><span id="todayLabel"></span></span><span class="currency-label">PROJECTION · AED</span></div>
     <section class="tally" aria-label="Cashflow overview">
@@ -554,7 +556,7 @@
     </section>
     <p class="form-error" id="storageError" role="alert" hidden></p>
     <section class="pots-section" aria-labelledby="potsTitle">
-      <div class="pots-heading"><h2 id="potsTitle">Pots <span class="count-badge" id="potCount">0</span></h2><button class="secondary-btn" id="addPotBtn" type="button"><i data-lucide="plus"></i>Add pot</button></div>
+      <div class="pots-heading"><h2 id="potsTitle">Pots <span class="count-badge" id="potCount">0</span></h2><button class="secondary-btn icon-fab" id="addPotBtn" type="button" aria-label="Add pot"><i data-lucide="plus"></i></button></div>
       <div class="panel rules-overview">
         <div class="rules-heading"><h3>Inflow allocation</h3><div class="rule-totals"><strong id="allocatedRule">0%</strong><span>allocated</span></div></div>
         <div class="rule-bar" id="ruleBar" role="img" aria-label="100% unallocated"></div>
