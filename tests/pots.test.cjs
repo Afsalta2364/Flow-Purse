@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 // Test the exact model shipped in the single-file app, without browser dependencies.
-const html = fs.readFileSync(path.join(__dirname, '..', 'flowpulse-ledger.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const source = html.match(/<script id="ledgerModel">([\s\S]*?)<\/script>/)[1];
 const Ledger = new Function(`${source}\nreturn Ledger;`)();
 const empty = () => ({ version: 2, pots: [], transactions: [] });

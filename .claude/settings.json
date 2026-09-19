@@ -5,7 +5,8 @@
       "Bash(sips --version)",
       "Bash(gh auth *)",
       "Bash(git --version)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(git mv *)"
     ]
   }
 }

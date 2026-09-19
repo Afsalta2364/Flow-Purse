@@ -2,7 +2,7 @@
   "name": "Flow Purse",
   "short_name": "Flow Purse",
   "description": "A little clarity for your cashflow. Track income, allocate it to pots, and plan your spending with Flow Purse.",
-  "start_url": "../flowpulse-ledger.html",
+  "start_url": "../index.html",
   "display": "standalone",
   "background_color": "#f5f7f4",
   "theme_color": "#f5f7f4",
